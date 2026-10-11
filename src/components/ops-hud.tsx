@@ -454,7 +454,7 @@ export function OpsHud(props: OpsHudProps) {
             : "pointer-events-auto absolute inset-x-0 bottom-[var(--marquee-bottom,3.5rem)] z-[6] border-t border-cyan-200/30 bg-[#041018]/88 shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur-md sm:bottom-14"
         }
       >
-        <Fold open={!open} className="intel-strip-fold">
+        <Fold open={!boxOpen} className="intel-strip-fold">
         <div className="intel-strip items-center gap-1 px-1.5 py-1">
           <span className="shrink-0 font-[family-name:var(--font-hud)] text-[0.62rem] tracking-[0.14em] text-cyan-100/70 uppercase">
             {tabLabel("ranked", m)}

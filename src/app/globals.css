@@ -159,6 +159,11 @@
   view-transition-name: harbour-intel;
 }
 
+#harbour-intel:not([data-intel-open="true"]) .intel-strip-fold,
+#harbour-intel:not([data-intel-open="true"]) .intel-strip-fold .fold-clip {
+  transition: none;
+}
+
 .intel-strip {
   display: flex;
 }
