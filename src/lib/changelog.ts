@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-one-park-pin",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "A car park the list publishes twice appears as one pin. The free-space count is the Transport Department number.",
+    tc: "名單上出現兩次的停車場，地圖只顯示一個。空位數目用運輸署的數字。",
+    sc: "名单上出现两次的停车场，地图只显示一个。空位数目用运输署的数字。",
+  },
+  {
     id: "2026-10-11-hosted-charger-free",
     date: "2026-10-11",
     kind: "fixed",

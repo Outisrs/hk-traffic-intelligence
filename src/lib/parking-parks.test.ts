@@ -82,6 +82,10 @@ const english = {
     { park_Id: "tdc108p1", name: "Kingston", displayAddress: "Kwun Tong" },
   ],
 }
+function park(id: string, nameTc: string, nameEn: string, lng: number, lat: number, heightM: number | null): ParkingPark {
+  return { id, nameTc, nameEn, addressTc: "", addressEn: "", lng, lat, heightM }
+}
+
 const oneStop = parseOneStopParks(chinese, english)
 assert.equal(oneStop.length, 2)
 assert.equal(oneStop.find((park) => park.id === "12")?.nameEn, "Amoy Plaza")
@@ -90,6 +94,25 @@ assert.equal(oneStop.find((park) => park.id === "12")?.heightM, 1.9)
 assert.equal(oneStop.some((park) => park.id === "tdc108p1"), true)
 assert.equal(oneStop.some((park) => park.id === "77"), false)
 assert.equal(collapseSameSites(oneStop).length, 2)
+
+const publishedTwice = collapseSameSites([
+  park("120", "彩盈邨停車場", "Choi Ying Estate Car Park", 114.21452, 22.3285, null),
+  park("tdc129p3", "彩盈邨車場", "Choi Ying Estate Car Park", 114.2144, 22.32824, null),
+  park("104", "AIRSIDE", "AIRSIDE", 114.1982, 22.3311, 2.4),
+  park("tdc121p1", "Airside", "Airside", 114.19834, 22.33117, 2.4),
+  park("93", "康寧道公園停車場", "Hong Ning Road Park Car Park", 114.23, 22.31, 2.45),
+  park("tdc53p3", "康寧道公園", "Hong Ning Road Park", 114.2301, 22.3101, null),
+  park("tdc14p4259", "沙角1號停車場", "Sha Kok Car Park 1", 114.19, 22.38, 1.7),
+  park("tdc14p4258", "沙角2號停車場", "Sha Kok Car Park 2", 114.1901, 22.3801, 2),
+  park("tdstt155", "海裕街停車場", "Hoi Yu Street Car Park", 114.2148, 22.2901, null),
+  park("tdstt141", "海裕街停車場", "Hoi Yu Street Car Park", 114.2126, 22.2911, null),
+])
+assert.equal(publishedTwice.length, 7)
+assert.equal(publishedTwice.find((item) => item.nameEn.includes("Choi"))?.id, "tdc129p3")
+assert.equal(publishedTwice.find((item) => item.nameEn.toLowerCase() === "airside")?.id, "tdc121p1")
+assert.equal(publishedTwice.find((item) => item.id === "tdc53p3")?.heightM, 2.45)
+assert.equal(publishedTwice.filter((item) => item.nameEn.includes("Sha Kok")).length, 2)
+assert.equal(publishedTwice.filter((item) => item.nameEn.includes("Hoi Yu")).length, 2)
 
 const vacancy = {
   results: [
