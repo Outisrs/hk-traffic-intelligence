@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-car-count-first",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "A car park with both a private-car count and a motorcycle count shows the private-car count on its pin.",
+    tc: "同時公布私家車和電單車空位的停車場，標籤顯示私家車空位。",
+    sc: "同时公布私家车和电单车空位的停车场，标签显示私家车空位。",
+  },
+  {
     id: "2026-10-11-sweep-pins",
     date: "2026-10-11",
     kind: "fixed",

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { collapseSameSites, parkLists, parseOneStopParks, parseOneStopSpaces, parseParkingParks, parseParkingSpaces, parksNear, publishedMotorcycleVacancies, publishedPrivateVacancies, oneStopCount, soloParkingRadiusMetres, type ParkingPark } from "./parking-parks.ts"
+import { carPinsWhenBoth, collapseSameSites, motorcyclePinsWhenBoth, parkLists, parseOneStopParks, parseOneStopSpaces, parseParkingParks, parseParkingSpaces, parksNear, publishedMotorcycleVacancies, publishedPrivateVacancies, oneStopCount, soloParkingRadiusMetres, type ParkingPark } from "./parking-parks.ts"
 
 const near: ParkingPark = {
   id: "near",
@@ -113,6 +113,18 @@ assert.equal(publishedTwice.find((item) => item.nameEn.toLowerCase() === "airsid
 assert.equal(publishedTwice.find((item) => item.id === "tdc53p3")?.heightM, 2.45)
 assert.equal(publishedTwice.filter((item) => item.nameEn.includes("Sha Kok")).length, 2)
 assert.equal(publishedTwice.filter((item) => item.nameEn.includes("Hoi Yu")).length, 2)
+
+const bothLayers = [
+  { id: "air", cars: 71 },
+  { id: "bikes", cars: null },
+  { id: "cars", cars: 4 },
+]
+const bikeIds = new Set(["air", "bikes"])
+const carIds = new Set(["air", "cars"])
+assert.deepEqual(carPinsWhenBoth(bothLayers, true, bikeIds).map((item) => item.id), ["air", "cars"])
+assert.deepEqual(carPinsWhenBoth(bothLayers, false, bikeIds).map((item) => item.id), ["air", "bikes", "cars"])
+assert.deepEqual(motorcyclePinsWhenBoth([{ id: "air" }, { id: "bikes" }], true, carIds).map((item) => item.id), ["bikes"])
+assert.deepEqual(motorcyclePinsWhenBoth([{ id: "air" }], false, carIds).map((item) => item.id), ["air"])
 
 const vacancy = {
   results: [

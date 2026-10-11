@@ -47,6 +47,7 @@ import { directedRouteMarks, stopPlate, stopPlateKey, type StopPlate } from "@/l
 import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, SOLO_PIN_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
 import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } from "@/lib/meter-poles"
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
+import { carPinsWhenBoth, motorcyclePinsWhenBoth } from "@/lib/parking-parks"
 import { soleLayer } from "@/lib/preferences"
 import { displayText, MESSAGES, type Locale, type Messages } from "@/lib/i18n"
 import { MAP_CREDIT } from "@/lib/map-credits"
@@ -704,17 +705,19 @@ export function CityMap({
         ...(layers.motorcycle && motorcycles ? motorcycles : []),
       ]
       const hosted = layers.charger && chargers && hostParks.length > 0 ? chargersInsideParks(chargers, hostParks) : new globalThis.Map<string, ChargerPlace>()
-      const motorcycleIds = layers.motorcycle && motorcycles ? new Set(motorcycles.map((park) => park.id)) : null
+      const motorcycleIdSet = layers.motorcycle && motorcycles ? new Set(motorcycles.map((park) => park.id)) : new Set<string>()
+      const carIdSet = layers.parking && parking ? new Set(parking.filter((park) => park.cars != null).map((park) => park.id)) : new Set<string>()
+      const parksDrawn = parking ? carPinsWhenBoth(parking, motorcycleIdSet.size > 0, motorcycleIdSet) : []
+      const bikesDrawn = motorcycles ? motorcyclePinsWhenBoth(motorcycles, carIdSet.size > 0, carIdSet) : []
       if (!layers.parking || !parking) {
         geoJsonSource(map, "parking")?.setData(emptyCollection())
       } else {
-        const parks = motorcycleIds ? parking.filter((park) => !motorcycleIds.has(park.id)) : parking
-        geoJsonSource(map, "parking")?.setData(parkingCollection(map, parks, locale, labels, counts, hosted))
+        geoJsonSource(map, "parking")?.setData(parkingCollection(map, parksDrawn, locale, labels, counts, hosted))
       }
       if (!layers.motorcycle || !motorcycles) {
         geoJsonSource(map, "motorcycle")?.setData(emptyCollection())
       } else {
-        geoJsonSource(map, "motorcycle")?.setData(motorcycleCollection(map, motorcycles, locale, labels, counts, hosted))
+        geoJsonSource(map, "motorcycle")?.setData(motorcycleCollection(map, bikesDrawn, locale, labels, counts, hosted))
       }
       if (!layers.kerb || !kerbs) {
         geoJsonSource(map, "kerb")?.setData(emptyCollection())

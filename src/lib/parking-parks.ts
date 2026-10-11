@@ -45,6 +45,24 @@ export function parkLists<T extends ParkingPark>(
   }
 }
 
+export function carPinsWhenBoth<T extends { id: string; cars: number | null }>(
+  parks: readonly T[],
+  motorcycleOn: boolean,
+  motorcycleIds: ReadonlySet<string>,
+): T[] {
+  if (!motorcycleOn) return [...parks]
+  return parks.filter((park) => park.cars != null || !motorcycleIds.has(park.id))
+}
+
+export function motorcyclePinsWhenBoth<T extends { id: string }>(
+  motorcycles: readonly T[],
+  parkingOn: boolean,
+  carIds: ReadonlySet<string>,
+): T[] {
+  if (!parkingOn) return [...motorcycles]
+  return motorcycles.filter((park) => !carIds.has(park.id))
+}
+
 export function parksNear<T extends ParkingPark>(parks: readonly T[], lng: number, lat: number, radiusM: number, cap = PARK_CAP): T[] {
   const near = parks.flatMap((park) => {
     const metres = metresBetween(lng, lat, park.lng, park.lat)
