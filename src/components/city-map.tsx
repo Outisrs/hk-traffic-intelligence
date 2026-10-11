@@ -44,7 +44,7 @@ import {
   workPopup,
 } from "@/components/map-cards"
 import { directedRouteMarks, stopPlate, stopPlateKey, type StopPlate } from "@/lib/stop-plate"
-import { FLYOVER_END_ZOOM, MIXED_PLACE_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
+import { AVAILABILITY_MIN_ZOOM, FLYOVER_END_ZOOM, PARK_METER_ZOOM, SOLO_PIN_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
 import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } from "@/lib/meter-poles"
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
 import { soleLayer } from "@/lib/preferences"
@@ -1611,9 +1611,9 @@ function addWatchLayers(map: Map, before: string | undefined) {
     }, before)
   }
   if (map.hasImage("camera-cone")) {
-    addCameraLayer(map, "cameras-harbour", ["==", ["get", "harbour"], 1], MIXED_PLACE_ZOOM, before)
-    addCameraLayer(map, "cameras-portal", ["all", ["==", ["get", "portal"], 1], ["!=", ["get", "harbour"], 1]], MIXED_PLACE_ZOOM, before)
-    addCameraLayer(map, "cameras-city", ["all", ["!=", ["get", "harbour"], 1], ["!=", ["get", "portal"], 1]], MIXED_PLACE_ZOOM, before)
+    addCameraLayer(map, "cameras-harbour", ["==", ["get", "harbour"], 1], AVAILABILITY_MIN_ZOOM, before)
+    addCameraLayer(map, "cameras-portal", ["all", ["==", ["get", "portal"], 1], ["!=", ["get", "harbour"], 1]], AVAILABILITY_MIN_ZOOM, before)
+    addCameraLayer(map, "cameras-city", ["all", ["!=", ["get", "harbour"], 1], ["!=", ["get", "portal"], 1]], AVAILABILITY_MIN_ZOOM, before)
   }
   addOverlay(map, {
     id: "mtr-track-casing",
@@ -1667,7 +1667,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "kmb-stops",
     type: "circle",
     source: "kmb-stops",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f7fbff",
@@ -1682,7 +1682,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "parking",
     type: "circle",
     source: "parking",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fff7ed",
@@ -1691,12 +1691,12 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "parking-label", "parking", before, MIXED_PLACE_ZOOM, true, "free")
+  addStopLabel(map, "parking-label", "parking", before, PARK_METER_ZOOM, true, "free")
   addOverlay(map, {
     id: "motorcycle",
     type: "circle",
     source: "motorcycle",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f5f3ff",
@@ -1705,12 +1705,12 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "motorcycle-label", "motorcycle", before, MIXED_PLACE_ZOOM, true, "free")
+  addStopLabel(map, "motorcycle-label", "motorcycle", before, COUNT_MIN_ZOOM, true, "free")
   addOverlay(map, {
     id: "kerb",
     type: "circle",
     source: "kerb",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fdf2f8",
@@ -1724,7 +1724,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "meters",
     type: "circle",
     source: "meters",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": meterColor("fill"),
@@ -1733,12 +1733,12 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "meters-label", "meters", before, MIXED_PLACE_ZOOM, true, "free")
+  addStopLabel(map, "meters-label", "meters", before, PARK_METER_ZOOM, true, "free")
   addOverlay(map, {
     id: "chargers",
     type: "circle",
     source: "chargers",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#ecfeff",
@@ -1747,7 +1747,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "chargers-label", "chargers", before, MIXED_PLACE_ZOOM, true, "free")
+  addStopLabel(map, "chargers-label", "chargers", before, COUNT_MIN_ZOOM, true, "free")
   addOverlay(map, {
     id: "lrt-track-casing",
     type: "line",
@@ -1800,7 +1800,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "citybus-stops",
     type: "circle",
     source: "citybus-stops",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fff8e8",
@@ -1815,7 +1815,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "gmb-stops",
     type: "circle",
     source: "gmb-stops",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f7fee7",
@@ -1829,7 +1829,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "nlb-stops",
     type: "circle",
     source: "nlb-stops",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f0fdfa",
@@ -1844,7 +1844,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "mtrbus-stops",
     type: "circle",
     source: "mtrbus-stops",
-    minzoom: MIXED_PLACE_ZOOM,
+    minzoom: SOLO_PIN_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f0fdf4",
