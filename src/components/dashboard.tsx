@@ -92,8 +92,9 @@ export function Dashboard() {
       : null
   const mtrBusPlacesUrl = layers.mtrbus && mtrBusQuery ? `/api/mtr-bus/places?${mtrBusQuery}${sole === "mtrbus" ? "&wide=1" : ""}` : null
   const parkWide = sole === "parking" || sole === "motorcycle"
+  const parkZoom = sole === "motorcycle" ? placePinZoom("motorcycle", sole) : placePinZoom("parking", sole)
   const parkPlacesUrl =
-    (layers.parking || layers.motorcycle) && view && view.zoom >= placePinZoom("parking", sole)
+    (layers.parking || layers.motorcycle) && view && view.zoom >= parkZoom
       ? `/api/parking/places?lng=${view.lng.toFixed(3)}&lat=${view.lat.toFixed(3)}&zoom=${view.zoom.toFixed(2)}${parkWide ? "&wide=1" : ""}`
       : null
   const meterWide = sole === "meter"

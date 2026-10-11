@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-flyover-places",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "After the opening sweep, the map shows the roads, the trains, and the ferries. Bus stops, cameras, and car parks appear when you move closer.",
+    tc: "開場掃過之後，地圖留下道路、列車和渡輪。巴士站、快拍和停車場要再拉近才顯示。",
+    sc: "开场扫过之后，地图留下道路、列车和渡轮。巴士站、快拍和停车场要再拉近才显示。",
+  },
+  {
     id: "2026-10-11-hosted-charger-free",
     date: "2026-10-11",
     kind: "fixed",

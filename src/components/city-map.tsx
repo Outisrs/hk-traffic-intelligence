@@ -44,7 +44,7 @@ import {
   workPopup,
 } from "@/components/map-cards"
 import { directedRouteMarks, stopPlate, stopPlateKey, type StopPlate } from "@/lib/stop-plate"
-import { AVAILABILITY_MIN_ZOOM, SOLO_PIN_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
+import { FLYOVER_END_ZOOM, MIXED_PLACE_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
 import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } from "@/lib/meter-poles"
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
 import { soleLayer } from "@/lib/preferences"
@@ -188,7 +188,7 @@ function tourCamera(step: (typeof FLYOVER)[number], basemap: Basemap) {
 const FLYOVER = [
   { center: [114.148, 22.3] as [number, number], zoom: 12.7, pitch: 60, bearing: -8, duration: 7000, curve: 1.25 },
   { center: [114.21, 22.3] as [number, number], zoom: 12.55, pitch: 54, bearing: 18, duration: 7600, curve: 1.25 },
-  { center: [114.178, 22.292] as [number, number], zoom: 13.05, pitch: 52, bearing: -12, duration: 7200, curve: 1.2 },
+  { center: [114.178, 22.292] as [number, number], zoom: FLYOVER_END_ZOOM, pitch: 52, bearing: -12, duration: 7200, curve: 1.2 },
 ]
 
 const WATCH_HITS = ["approach-times", "incidents", "cameras-harbour", "cameras-portal", "cameras-city", "works", "tolls-portal", "tolls-overview", "control-points", "mtr-stations", "mtr-station-label", "mtr-trains", "mtr-train-label", "kmb-stops", "kmb-stop-label", "lrt-stations", "lrt-station-label", "lrt-trains", "lrt-train-label", "citybus-stops", "citybus-stop-label", "gmb-stops", "gmb-stop-label", "nlb-stops", "nlb-stop-label", "mtrbus-stops", "mtrbus-stop-label", "ferry-piers", "ferry-pier-label", "ferry-vessels", "ferry-vessel-label", "parking", "parking-label", "motorcycle", "motorcycle-label", "kerb", "kerb-label", "meters", "meters-label", "chargers", "chargers-label"]
@@ -1611,9 +1611,9 @@ function addWatchLayers(map: Map, before: string | undefined) {
     }, before)
   }
   if (map.hasImage("camera-cone")) {
-    addCameraLayer(map, "cameras-harbour", ["==", ["get", "harbour"], 1], AVAILABILITY_MIN_ZOOM, before)
-    addCameraLayer(map, "cameras-portal", ["all", ["==", ["get", "portal"], 1], ["!=", ["get", "harbour"], 1]], AVAILABILITY_MIN_ZOOM, before)
-    addCameraLayer(map, "cameras-city", ["all", ["!=", ["get", "harbour"], 1], ["!=", ["get", "portal"], 1]], AVAILABILITY_MIN_ZOOM, before)
+    addCameraLayer(map, "cameras-harbour", ["==", ["get", "harbour"], 1], MIXED_PLACE_ZOOM, before)
+    addCameraLayer(map, "cameras-portal", ["all", ["==", ["get", "portal"], 1], ["!=", ["get", "harbour"], 1]], MIXED_PLACE_ZOOM, before)
+    addCameraLayer(map, "cameras-city", ["all", ["!=", ["get", "harbour"], 1], ["!=", ["get", "portal"], 1]], MIXED_PLACE_ZOOM, before)
   }
   addOverlay(map, {
     id: "mtr-track-casing",
@@ -1667,7 +1667,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "kmb-stops",
     type: "circle",
     source: "kmb-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f7fbff",
@@ -1682,7 +1682,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "parking",
     type: "circle",
     source: "parking",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fff7ed",
@@ -1691,12 +1691,12 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "parking-label", "parking", before, COUNT_MIN_ZOOM, true, "free")
+  addStopLabel(map, "parking-label", "parking", before, MIXED_PLACE_ZOOM, true, "free")
   addOverlay(map, {
     id: "motorcycle",
     type: "circle",
     source: "motorcycle",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f5f3ff",
@@ -1705,12 +1705,12 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "motorcycle-label", "motorcycle", before, COUNT_MIN_ZOOM, true, "free")
+  addStopLabel(map, "motorcycle-label", "motorcycle", before, MIXED_PLACE_ZOOM, true, "free")
   addOverlay(map, {
     id: "kerb",
     type: "circle",
     source: "kerb",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fdf2f8",
@@ -1724,7 +1724,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "meters",
     type: "circle",
     source: "meters",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": meterColor("fill"),
@@ -1733,12 +1733,12 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "meters-label", "meters", before, COUNT_MIN_ZOOM, true, "free")
+  addStopLabel(map, "meters-label", "meters", before, MIXED_PLACE_ZOOM, true, "free")
   addOverlay(map, {
     id: "chargers",
     type: "circle",
     source: "chargers",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#ecfeff",
@@ -1747,7 +1747,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "chargers-label", "chargers", before, COUNT_MIN_ZOOM, true, "free")
+  addStopLabel(map, "chargers-label", "chargers", before, MIXED_PLACE_ZOOM, true, "free")
   addOverlay(map, {
     id: "lrt-track-casing",
     type: "line",
@@ -1800,7 +1800,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "citybus-stops",
     type: "circle",
     source: "citybus-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fff8e8",
@@ -1815,7 +1815,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "gmb-stops",
     type: "circle",
     source: "gmb-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f7fee7",
@@ -1829,7 +1829,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "nlb-stops",
     type: "circle",
     source: "nlb-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f0fdfa",
@@ -1844,7 +1844,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "mtrbus-stops",
     type: "circle",
     source: "mtrbus-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: MIXED_PLACE_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f0fdf4",
