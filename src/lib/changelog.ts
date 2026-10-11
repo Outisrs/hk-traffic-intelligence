@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-12-card-kind",
+    date: "2026-10-12",
+    at: "2026-10-11T18:05:00Z",
+    kind: "fixed",
+    en: "Every place card names what it is, in the same words as its layer. A meter card says Meters.",
+    tc: "每個地點卡都用圖層的名稱寫明它是什麼。咪錶卡寫明咪錶。",
+    sc: "每个地点卡都用图层的名称写明它是什么。咪表卡写明咪表。",
+  },
+  {
     id: "2026-10-11-layer-close",
     date: "2026-10-11",
     at: "2026-10-11T16:13:11Z",

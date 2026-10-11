@@ -25,7 +25,7 @@ const stamped = [{ date: "2026-10-11", at: "2026-10-11T16:13:11Z" }]
 assert.equal(changelogIsFresh(stamped, new Date("2026-10-11T17:41:00Z")), true)
 assert.equal(changelogIsFresh(stamped, new Date("2026-10-12T16:13:10Z")), true)
 assert.equal(changelogIsFresh(stamped, new Date("2026-10-12T16:13:11Z")), false)
-assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-11T17:41:00Z")), true)
-assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-12T16:13:11Z")), false)
+assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-11T18:10:00Z")), true)
+assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-12T18:05:00Z")), false)
 
 console.log("changelog ok")

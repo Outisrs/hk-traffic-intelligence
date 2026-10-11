@@ -239,6 +239,7 @@ export type Messages = {
   plateFree: string
   parkingAsOf: (count: string, time: string) => string
   parkingHeight: (n: number) => string
+  journeyTime: string
   meter: string
   meterFailed: string
   meterGeneral: string
@@ -466,6 +467,7 @@ const en: Messages = {
   plateFree: "free",
   parkingAsOf: (count, time) => `${count} at ${time}`,
   parkingHeight: (n) => `Height limit ${n} m`,
+  journeyTime: "Journey time",
   meter: "Meters",
   meterFailed: "Meters did not load.",
   meterGeneral: "Private car / light van",
@@ -693,6 +695,7 @@ const zhHK: Messages = {
   plateFree: "空位",
   parkingAsOf: (count, time) => `${count}（${time}）`,
   parkingHeight: (n) => `限高 ${n} 米`,
+  journeyTime: "行車時間",
   meter: "咪錶",
   meterFailed: "未能載入咪錶。",
   meterGeneral: "私家車／輕型貨車",
@@ -910,6 +913,7 @@ const zhCN: Messages = {
   plateFree: "空位",
   parkingAsOf: (count, time) => `${count}（${time}）`,
   parkingHeight: (n) => `限高 ${n} 米`,
+  journeyTime: "行车时间",
   meter: "咪表",
   meterFailed: "未能载入咪表。",
   meterGeneral: "私家车／轻型货车",
