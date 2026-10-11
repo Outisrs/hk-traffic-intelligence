@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-intel-close-lift",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "Closing the intel card no longer lifts it before it shortens.",
+    tc: "收起情報卡時，卡片不再先升高。",
+    sc: "收起情报卡时，卡片不再先升高。",
+  },
+  {
     id: "2026-10-11-intel-close",
     date: "2026-10-11",
     kind: "fixed",

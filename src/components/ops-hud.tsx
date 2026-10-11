@@ -94,6 +94,8 @@ export function OpsHud(props: OpsHudProps) {
   const setPinnedOrigin = (next: string | null) => updatePreference({ pinnedOrigin: next })
   const open = props.open
   const [boxOpen, setBoxOpen] = useState(open)
+  const [heldList, setHeldList] = useState<number | null>(null)
+  const layoutEpoch = useRef(0)
   useEffect(() => {
     if (open) {
       setBoxOpen(true)
@@ -101,6 +103,7 @@ export function OpsHud(props: OpsHudProps) {
     }
     if (motionDelay() === 0) {
       setBoxOpen(false)
+      setHeldList(null)
       return
     }
     const panel = document.querySelector<HTMLElement>(".intel-panel-fold")
@@ -109,6 +112,7 @@ export function OpsHud(props: OpsHudProps) {
       if (finished) return
       finished = true
       setBoxOpen(false)
+      setHeldList(null)
     }
     const onEnd = (event: TransitionEvent) => {
       if (event.target !== panel || event.propertyName !== "grid-template-rows") return
@@ -171,6 +175,17 @@ export function OpsHud(props: OpsHudProps) {
   const worstHall = firstOpenBoundary(board.boundary)
   const changeOpen = (next: boolean) => {
     if (next === open) return
+    const list = document.getElementById("harbour-intel-list")
+    if (!next && list) {
+      const height = Math.ceil(list.getBoundingClientRect().height)
+      if (height > 0) {
+        list.style.maxHeight = `${height}px`
+        setHeldList(height)
+      }
+    } else if (list) {
+      list.style.maxHeight = ""
+      setHeldList(null)
+    }
     props.onOpenChange(next)
   }
   const show = (next: IntelTab, item: IntelItem | undefined) => {
@@ -180,6 +195,7 @@ export function OpsHud(props: OpsHudProps) {
   }
   useEffect(() => {
     const root = document.documentElement
+    const epoch = ++layoutEpoch.current
     const apply = () => {
       const narrow = window.matchMedia(INTEL_PHONE_QUERY).matches
       const attrib = document.querySelector<HTMLElement>(".maplibregl-ctrl-attrib")
@@ -256,12 +272,15 @@ export function OpsHud(props: OpsHudProps) {
       observer.disconnect()
       mutations.disconnect()
       window.removeEventListener("resize", apply)
-      root.style.removeProperty("--map-control-top")
-      root.style.removeProperty("--map-dock-bottom")
-      root.style.removeProperty("--intel-list-max")
-      root.style.removeProperty("--intel-bottom")
-      root.style.removeProperty("--marquee-bottom")
-      root.style.removeProperty("--dock-closed-bottom")
+      queueMicrotask(() => {
+        if (layoutEpoch.current !== epoch) return
+        root.style.removeProperty("--map-control-top")
+        root.style.removeProperty("--map-dock-bottom")
+        root.style.removeProperty("--intel-list-max")
+        root.style.removeProperty("--intel-bottom")
+        root.style.removeProperty("--marquee-bottom")
+        root.style.removeProperty("--dock-closed-bottom")
+      })
     }
   }, [barOpen, boxOpen, locale, open, props.mapLive])
   return (
@@ -519,6 +538,7 @@ export function OpsHud(props: OpsHudProps) {
             id="harbour-intel-list"
             role="tabpanel"
             aria-labelledby={`intel-tab-${tab}`}
+            style={heldList ? { maxHeight: heldList } : undefined}
             className="intel-scroll max-h-[min(26rem,46dvh,var(--intel-list-max,100dvh))] overflow-y-auto border-t border-white/10 px-2 py-2"
           >
             {tab === "notes" ? (
