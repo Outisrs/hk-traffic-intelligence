@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-jordan-track",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "The Tsuen Wan line leaves Jordan toward Tsim Sha Tsui without stepping back toward Yau Ma Tei.",
+    tc: "荃灣綫從佐敦往尖沙咀，不再先折返油麻地方向。",
+    sc: "荃湾线从佐敦往尖沙咀，不再先折返油麻地方向。",
+  },
+  {
     id: "2026-10-11-car-count-first",
     date: "2026-10-11",
     kind: "fixed",
