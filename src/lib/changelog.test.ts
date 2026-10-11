@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { CHANGELOG, changelogText } from "./changelog.ts"
+import { CHANGELOG, changelogIsFresh, changelogText } from "./changelog.ts"
 
 const hidden = ["token", "cache", "429", "html", "worker", "isolate", "oauth"]
 assert.ok(CHANGELOG.length > 0)
@@ -14,5 +14,11 @@ for (const entry of CHANGELOG) {
   const blob = `${entry.en} ${entry.tc} ${entry.sc}`.toLowerCase()
   for (const word of hidden) assert.equal(blob.includes(word), false, `${entry.id} ${word}`)
 }
+
+const today = [{ date: "2026-10-11" }]
+assert.equal(changelogIsFresh(today, new Date("2026-10-11T04:00:00Z")), true)
+assert.equal(changelogIsFresh(today, new Date("2026-10-11T16:00:00Z")), false)
+assert.equal(changelogIsFresh(today, new Date("2026-10-10T16:00:00Z")), true)
+assert.equal(changelogIsFresh([], new Date("2026-10-11T04:00:00Z")), false)
 
 console.log("changelog ok")

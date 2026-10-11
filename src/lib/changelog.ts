@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-updates-dot",
+    date: "2026-10-11",
+    kind: "added",
+    en: "Updates shows a dot on the day a line is added.",
+    tc: "當天有新項目時，「更新」顯示一點。",
+    sc: "当天有新项目时，「更新」显示一点。",
+  },
+  {
     id: "2026-10-11-jordan-track",
     date: "2026-10-11",
     kind: "fixed",
@@ -853,6 +861,22 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     sc: "三条过海隧道显示实时分钟。",
   },
 ]
+
+const HONG_KONG = "Asia/Hong_Kong"
+
+export function changelogDayKey(now: Date): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: HONG_KONG,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now)
+}
+
+export function changelogIsFresh(entries: readonly { date: string }[], now = new Date()): boolean {
+  const newest = entries[0]?.date
+  return newest !== undefined && newest === changelogDayKey(now)
+}
 
 export function changelogText(entry: ChangelogEntry, locale: Locale): string {
   switch (locale) {

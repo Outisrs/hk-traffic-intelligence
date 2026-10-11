@@ -7,7 +7,7 @@ import { useI18n } from "@/components/locale"
 import { boundaryGlance } from "@/lib/control-points"
 import { crossingsFrom, nearestApproach } from "@/lib/crossings"
 import { displayText, formatClock, LOCALE_MARK, LOCALES, type Messages } from "@/lib/i18n"
-import { CHANGELOG, changelogText } from "@/lib/changelog"
+import { CHANGELOG, changelogIsFresh, changelogText } from "@/lib/changelog"
 import type { BoardFault } from "@/lib/board-status"
 import { layerForIntel } from "@/lib/intel-focus"
 import { firstOpenBoundary, INTEL_TABS, intelBoard, type IntelItem, type IntelTab } from "@/lib/intel"
@@ -62,6 +62,15 @@ const BAR_KEY = {
   WH: "western",
 } as const
 
+function UpdatesMark({ fresh, label }: { fresh: boolean; label: string }) {
+  return (
+    <>
+      {fresh ? <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-[#3DDC97]" /> : null}
+      {label}
+    </>
+  )
+}
+
 export function OpsHud(props: OpsHudProps) {
   const { locale, setLocale, messages: m } = useI18n()
   const clock = useHongKongClock(locale)
@@ -83,6 +92,7 @@ export function OpsHud(props: OpsHudProps) {
   const summary = props.traffic?.ok ? props.traffic.summary : null
   const totalBands = summary ? summary.free + summary.slow + summary.congested : 0
   const live = Boolean(summary) && !props.trafficError
+  const updatesFresh = changelogIsFresh(CHANGELOG)
   const board = intelBoard({
     trafficError: props.trafficError,
     traffic: props.traffic,
@@ -264,9 +274,9 @@ export function OpsHud(props: OpsHudProps) {
             type="button"
             aria-expanded={open && tab === "notes"}
             onClick={() => show("notes", undefined)}
-            className="hidden shrink-0 border border-cyan-200/50 bg-cyan-300/10 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 sm:inline-flex"
+            className="hidden shrink-0 items-center gap-1.5 border border-cyan-200/50 bg-cyan-300/10 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 sm:inline-flex"
           >
-            {m.changelog}
+            <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
         </div>
         <div className="flex min-w-0 flex-1 items-center gap-1">
@@ -357,9 +367,9 @@ export function OpsHud(props: OpsHudProps) {
             type="button"
             aria-expanded={open && tab === "notes"}
             onClick={() => show("notes", undefined)}
-            className="shrink-0 border border-cyan-200/50 bg-cyan-300/10 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 sm:hidden"
+            className="inline-flex shrink-0 items-center gap-1.5 border border-cyan-200/50 bg-cyan-300/10 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 sm:hidden"
           >
-            {m.changelog}
+            <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
           </div>
           <button
