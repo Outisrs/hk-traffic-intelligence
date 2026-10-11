@@ -66,6 +66,13 @@ function FreshDot() {
   return <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-[#3DDC97]" />
 }
 
+const FOLD_MS = 280
+
+function motionDelay(): number {
+  if (typeof window === "undefined") return 0
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : FOLD_MS
+}
+
 function UpdatesMark({ fresh, label }: { fresh: boolean; label: string }) {
   return (
     <>
@@ -86,6 +93,35 @@ export function OpsHud(props: OpsHudProps) {
   const pinnedOrigin = prefs.pinnedOrigin
   const setPinnedOrigin = (next: string | null) => updatePreference({ pinnedOrigin: next })
   const open = props.open
+  const [boxOpen, setBoxOpen] = useState(open)
+  useEffect(() => {
+    if (open) {
+      setBoxOpen(true)
+      return
+    }
+    if (motionDelay() === 0) {
+      setBoxOpen(false)
+      return
+    }
+    const panel = document.querySelector<HTMLElement>(".intel-panel-fold")
+    let finished = false
+    const finish = () => {
+      if (finished) return
+      finished = true
+      setBoxOpen(false)
+    }
+    const onEnd = (event: TransitionEvent) => {
+      if (event.target !== panel || event.propertyName !== "grid-template-rows") return
+      finish()
+    }
+    panel?.addEventListener("transitionend", onEnd)
+    const id = window.setTimeout(finish, FOLD_MS + 40)
+    return () => {
+      finished = true
+      panel?.removeEventListener("transitionend", onEnd)
+      window.clearTimeout(id)
+    }
+  }, [open])
   const approachPoints = props.approaches?.ok ? props.approaches.points : []
   const nearest = nearestApproach(approachPoints, props.view)
   const pinned = pinnedOrigin ? approachPoints.find((point) => point.id === pinnedOrigin) ?? null : null
@@ -180,12 +216,12 @@ export function OpsHud(props: OpsHudProps) {
         const minTop = Math.ceil(headerBox.bottom + (narrow ? zoomH + dockH + 28 : 8))
         const available = window.innerHeight - bottomGap - minTop - aboveList
         root.style.setProperty("--intel-list-max", `${Math.max(72, Math.floor(available))}px`)
-      } else {
+      } else if (!boxOpen) {
         root.style.removeProperty("--intel-list-max")
         root.style.removeProperty("--intel-bottom")
       }
       const panelBox = panel?.getBoundingClientRect()
-      if (narrow && open && panelBox && panelBox.height > 80 && panelBox.top > 80) {
+      if (narrow && boxOpen && panelBox && panelBox.height > 80 && panelBox.top > 80) {
         root.style.setProperty("--map-dock-bottom", `${Math.ceil(window.innerHeight - panelBox.top + 8)}px`)
       } else {
         root.style.removeProperty("--map-dock-bottom")
@@ -227,7 +263,7 @@ export function OpsHud(props: OpsHudProps) {
       root.style.removeProperty("--marquee-bottom")
       root.style.removeProperty("--dock-closed-bottom")
     }
-  }, [barOpen, locale, open, props.mapLive])
+  }, [barOpen, boxOpen, locale, open, props.mapLive])
   return (
     <div className="@container/hud pointer-events-none absolute inset-0 z-[5]">
       <Fold open={!barOpen} className="pointer-events-auto absolute top-2 left-2 z-[6] sm:hidden">
@@ -411,9 +447,9 @@ export function OpsHud(props: OpsHudProps) {
       <section
         id="harbour-intel"
         data-map-chrome="panel"
-        data-intel-open={props.choice === null ? undefined : props.choice ? "true" : "false"}
+        data-intel-open={boxOpen ? "true" : props.choice === null ? undefined : "false"}
         className={
-          open
+          boxOpen
             ? "pointer-events-auto absolute right-3 bottom-[var(--intel-bottom,6rem)] z-[6] w-[min(22rem,calc(100%-1.5rem))] border border-cyan-200/30 bg-[#041018]/88 shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur-md sm:bottom-36 lg:right-4 lg:bottom-14"
             : "pointer-events-auto absolute inset-x-0 bottom-[var(--marquee-bottom,3.5rem)] z-[6] border-t border-cyan-200/30 bg-[#041018]/88 shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur-md sm:bottom-14"
         }
