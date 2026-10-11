@@ -92,13 +92,17 @@ export function Dashboard() {
       : null
   const mtrBusPlacesUrl = layers.mtrbus && mtrBusQuery ? `/api/mtr-bus/places?${mtrBusQuery}${sole === "mtrbus" ? "&wide=1" : ""}` : null
   const parkWide = sole === "parking" || sole === "motorcycle"
+  const parkFloors = [
+    ...(layers.parking ? [placePinZoom("parking", sole, basemap)] : []),
+    ...(layers.motorcycle ? [placePinZoom("motorcycle", sole, basemap)] : []),
+  ]
   const parkPlacesUrl =
-    (layers.parking || layers.motorcycle) && view && view.zoom >= placePinZoom("parking", sole)
+    parkFloors.length > 0 && view && view.zoom >= Math.min(...parkFloors)
       ? `/api/parking/places?lng=${view.lng.toFixed(3)}&lat=${view.lat.toFixed(3)}&zoom=${view.zoom.toFixed(2)}${parkWide ? "&wide=1" : ""}`
       : null
   const meterWide = sole === "meter"
   const meterPlacesUrl =
-    layers.meter && view && view.zoom >= placePinZoom("meter", sole)
+    layers.meter && view && view.zoom >= placePinZoom("meter", sole, basemap)
       ? `/api/meters/places?lng=${view.lng.toFixed(3)}&lat=${view.lat.toFixed(3)}&zoom=${view.zoom.toFixed(2)}${meterWide ? "&wide=1" : ""}`
       : null
   const chargerWide = sole === "charger"

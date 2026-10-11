@@ -21,6 +21,14 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     sc: "名单上出现两次的停车场，地图只显示一个。空位数目用运输署的数字。",
   },
   {
+    id: "2026-10-11-flyover-places",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "Car parks and meters stay off the last frame of the opening sweep. They appear when you move half a level closer.",
+    tc: "開場的最後一幕不顯示停車場和咪錶。再拉近半級才出現。",
+    sc: "开场的最后一幕不显示停车场和咪表。再拉近半级才出现。",
+  },
+  {
     id: "2026-10-11-hosted-charger-free",
     date: "2026-10-11",
     kind: "fixed",
