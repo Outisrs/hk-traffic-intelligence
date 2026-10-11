@@ -762,23 +762,23 @@ export function CityMap({
     const kinds: WatchLayer[] = ["speed", "cameras", "works", "tolls", "incidents", "control", "mtr", "kmb", "lrt", "citybus", "gmb", "nlb", "mtrbus", "ferry", "parking", "motorcycle", "kerb", "meter", "charger"]
     const sole = soleLayer(layers)
     const pinZoom: Partial<Record<string, number>> = {
-      "kmb-stops": placePinZoom("kmb", sole),
+      "kmb-stops": placePinZoom("kmb", sole, basemap),
       parking: placePinZoom("parking", sole, basemap),
       "parking-label": placePinZoom("parking", sole, basemap),
-      motorcycle: placePinZoom("motorcycle", sole),
-      "motorcycle-label": placePinZoom("motorcycle", sole),
-      kerb: placePinZoom("kerb", sole),
+      motorcycle: placePinZoom("motorcycle", sole, basemap),
+      "motorcycle-label": placePinZoom("motorcycle", sole, basemap),
+      kerb: placePinZoom("kerb", sole, basemap),
       meters: placePinZoom("meter", sole, basemap),
       "meters-label": placePinZoom("meter", sole, basemap),
-      chargers: placePinZoom("charger", sole),
-      "chargers-label": placePinZoom("charger", sole),
-      "citybus-stops": placePinZoom("citybus", sole),
-      "gmb-stops": placePinZoom("gmb", sole),
-      "nlb-stops": placePinZoom("nlb", sole),
-      "mtrbus-stops": placePinZoom("mtrbus", sole),
-      "cameras-harbour": placePinZoom("cameras", sole),
-      "cameras-portal": placePinZoom("cameras", sole),
-      "cameras-city": placePinZoom("cameras", sole),
+      chargers: placePinZoom("charger", sole, basemap),
+      "chargers-label": placePinZoom("charger", sole, basemap),
+      "citybus-stops": placePinZoom("citybus", sole, basemap),
+      "gmb-stops": placePinZoom("gmb", sole, basemap),
+      "nlb-stops": placePinZoom("nlb", sole, basemap),
+      "mtrbus-stops": placePinZoom("mtrbus", sole, basemap),
+      "cameras-harbour": placePinZoom("cameras", sole, basemap),
+      "cameras-portal": placePinZoom("cameras", sole, basemap),
+      "cameras-city": placePinZoom("cameras", sole, basemap),
     }
     for (const kind of kinds) {
       for (const layerId of layerIds(kind)) {
@@ -1667,7 +1667,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "kmb-stops",
     type: "circle",
     source: "kmb-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f7fbff",
@@ -1696,7 +1696,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "motorcycle",
     type: "circle",
     source: "motorcycle",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f5f3ff",
@@ -1705,12 +1705,12 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "motorcycle-label", "motorcycle", before, COUNT_MIN_ZOOM, true, "free")
+  addStopLabel(map, "motorcycle-label", "motorcycle", before, BUILDINGS_PARK_METER_ZOOM, true, "free")
   addOverlay(map, {
     id: "kerb",
     type: "circle",
     source: "kerb",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fdf2f8",
@@ -1800,7 +1800,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "citybus-stops",
     type: "circle",
     source: "citybus-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fff8e8",
@@ -1815,7 +1815,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "gmb-stops",
     type: "circle",
     source: "gmb-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f7fee7",
@@ -1829,7 +1829,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "nlb-stops",
     type: "circle",
     source: "nlb-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f0fdfa",
@@ -1844,7 +1844,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "mtrbus-stops",
     type: "circle",
     source: "mtrbus-stops",
-    minzoom: SOLO_PIN_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#f0fdf4",

@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-sweep-pins",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "Bus stops and motorcycle parks stay off the last frame of the opening sweep, with the car parks and meters.",
+    tc: "開場的最後一幕不顯示巴士站和電單車停車場，與停車場和咪錶一樣。",
+    sc: "开场的最后一幕不显示巴士站和电单车停车场，与停车场和咪表一样。",
+  },
+  {
     id: "2026-10-11-one-park-pin",
     date: "2026-10-11",
     kind: "fixed",

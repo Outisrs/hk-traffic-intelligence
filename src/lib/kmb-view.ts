@@ -14,7 +14,17 @@ export const KMB_POLL_MS = 60_000
 export const PLACE_POLL_MS = 12 * 60 * 60 * 1000
 
 const AVAILABILITY_LAYERS = new Set<WatchLayer>(["cameras", "charger"])
-const DOT_LAYERS = new Set<WatchLayer>(["motorcycle"])
+const AFTER_SWEEP = new Set<WatchLayer>([
+  "parking",
+  "meter",
+  "motorcycle",
+  "kerb",
+  "kmb",
+  "citybus",
+  "gmb",
+  "nlb",
+  "mtrbus",
+])
 
 export function parkMeterZoom(basemap: Basemap): number {
   switch (basemap) {
@@ -32,9 +42,9 @@ export function parkMeterZoom(basemap: Basemap): number {
 
 export function placePinZoom(layer: WatchLayer, sole: WatchLayer | null, basemap: Basemap = "satellite"): number {
   if (sole === layer) return SOLO_PIN_ZOOM
-  if (layer === "parking" || layer === "meter") return parkMeterZoom(basemap)
-  if (DOT_LAYERS.has(layer)) return SOLO_PIN_ZOOM
-  if (AVAILABILITY_LAYERS.has(layer)) return AVAILABILITY_MIN_ZOOM
+  const pastSweep = parkMeterZoom(basemap)
+  if (AFTER_SWEEP.has(layer)) return pastSweep
+  if (AVAILABILITY_LAYERS.has(layer)) return Math.max(AVAILABILITY_MIN_ZOOM, pastSweep)
   return KMB_MIN_ZOOM
 }
 
