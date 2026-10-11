@@ -329,7 +329,6 @@
 
 .layer-dock[data-layers-open="false"] .fold {
   grid-template-rows: 0fr;
-  grid-template-columns: 0fr;
   opacity: 0;
   pointer-events: none;
 }
@@ -337,7 +336,6 @@
 @media (max-width: 760px) {
   .layer-dock:not([data-layers-open="true"]) .fold {
     grid-template-rows: 0fr;
-    grid-template-columns: 0fr;
     opacity: 0;
     pointer-events: none;
     transition: none;

@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-layer-close",
+    date: "2026-10-11",
+    kind: "fixed",
+    en: "Closing the layer bar shortens it. It does not shoot upward first.",
+    tc: "收起圖層列時，名單在原位縮短，不會先衝高。",
+    sc: "收起图层列时，名单在原位缩短，不会先冲高。",
+  },
+  {
     id: "2026-10-11-intel-close-lift",
     date: "2026-10-11",
     kind: "fixed",
