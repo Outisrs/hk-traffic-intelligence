@@ -13,6 +13,14 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-11-updates-tab",
+    date: "2026-10-11",
+    kind: "added",
+    en: "The Updates tab on the intel card shows the same dot.",
+    tc: "情報卡的「更新」分頁顯示同一點。",
+    sc: "情报卡的「更新」分页显示同一点。",
+  },
+  {
     id: "2026-10-11-updates-dot",
     date: "2026-10-11",
     kind: "added",

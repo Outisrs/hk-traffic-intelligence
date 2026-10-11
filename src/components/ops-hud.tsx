@@ -62,10 +62,14 @@ const BAR_KEY = {
   WH: "western",
 } as const
 
+function FreshDot() {
+  return <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-[#3DDC97]" />
+}
+
 function UpdatesMark({ fresh, label }: { fresh: boolean; label: string }) {
   return (
     <>
-      {fresh ? <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-[#3DDC97]" /> : null}
+      {fresh ? <FreshDot /> : null}
       {label}
     </>
   )
@@ -458,6 +462,7 @@ export function OpsHud(props: OpsHudProps) {
                     }`}
                   >
                     {tabLabel(id, m)}
+                    {id === "notes" && updatesFresh ? <FreshDot /> : null}
                     {urgent ? <span className="size-1 rounded-full bg-[#FF5D73]" /> : null}
                   </button>
                 )
