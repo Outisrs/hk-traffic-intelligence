@@ -44,7 +44,7 @@ import {
   workPopup,
 } from "@/components/map-cards"
 import { directedRouteMarks, stopPlate, stopPlateKey, type StopPlate } from "@/lib/stop-plate"
-import { AVAILABILITY_MIN_ZOOM, FLYOVER_END_ZOOM, PARK_METER_ZOOM, SOLO_PIN_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
+import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, SOLO_PIN_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
 import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } from "@/lib/meter-poles"
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
 import { soleLayer } from "@/lib/preferences"
@@ -177,7 +177,7 @@ function tourCamera(step: (typeof FLYOVER)[number], basemap: Basemap) {
     case "satellite":
       return step
     case "buildings":
-      return { ...step, zoom: Math.max(step.zoom, 15.2), pitch: Math.max(step.pitch, 60) }
+      return { ...step, zoom: Math.max(step.zoom, BUILDINGS_FLYOVER_ZOOM), pitch: Math.max(step.pitch, 60) }
     default: {
       const exhaustive: never = basemap
       return exhaustive
@@ -763,13 +763,13 @@ export function CityMap({
     const sole = soleLayer(layers)
     const pinZoom: Partial<Record<string, number>> = {
       "kmb-stops": placePinZoom("kmb", sole),
-      parking: placePinZoom("parking", sole),
-      "parking-label": placePinZoom("parking", sole),
+      parking: placePinZoom("parking", sole, basemap),
+      "parking-label": placePinZoom("parking", sole, basemap),
       motorcycle: placePinZoom("motorcycle", sole),
       "motorcycle-label": placePinZoom("motorcycle", sole),
       kerb: placePinZoom("kerb", sole),
-      meters: placePinZoom("meter", sole),
-      "meters-label": placePinZoom("meter", sole),
+      meters: placePinZoom("meter", sole, basemap),
+      "meters-label": placePinZoom("meter", sole, basemap),
       chargers: placePinZoom("charger", sole),
       "chargers-label": placePinZoom("charger", sole),
       "citybus-stops": placePinZoom("citybus", sole),
@@ -788,7 +788,7 @@ export function CityMap({
         if (min != null) map.setLayerZoomRange(layerId, min, 24)
       }
     }
-  }, [disabled, layers, mapReady, styleEpoch])
+  }, [basemap, disabled, layers, mapReady, styleEpoch])
 
   function basemapTitle(mode: Basemap): string {
     switch (mode) {
@@ -1682,7 +1682,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "parking",
     type: "circle",
     source: "parking",
-    minzoom: PARK_METER_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": "#fff7ed",
@@ -1691,7 +1691,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "parking-label", "parking", before, PARK_METER_ZOOM, true, "free")
+  addStopLabel(map, "parking-label", "parking", before, BUILDINGS_PARK_METER_ZOOM, true, "free")
   addOverlay(map, {
     id: "motorcycle",
     type: "circle",
@@ -1724,7 +1724,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
     id: "meters",
     type: "circle",
     source: "meters",
-    minzoom: PARK_METER_ZOOM,
+    minzoom: BUILDINGS_PARK_METER_ZOOM,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 13, 3.5, 16, 6],
       "circle-color": meterColor("fill"),
@@ -1733,7 +1733,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
       "circle-pitch-alignment": "map",
     },
   }, before)
-  addStopLabel(map, "meters-label", "meters", before, PARK_METER_ZOOM, true, "free")
+  addStopLabel(map, "meters-label", "meters", before, BUILDINGS_PARK_METER_ZOOM, true, "free")
   addOverlay(map, {
     id: "chargers",
     type: "circle",
