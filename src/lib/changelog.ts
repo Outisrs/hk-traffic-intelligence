@@ -6,6 +6,7 @@ export type ChangelogEntry = {
   id: string
   date: string
   kind: ChangelogKind
+  at?: string
   en: string
   tc: string
   sc: string
@@ -15,6 +16,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     id: "2026-10-11-layer-close",
     date: "2026-10-11",
+    at: "2026-10-11T16:13:11Z",
     kind: "fixed",
     en: "Closing the layer bar shortens it. It does not shoot upward first.",
     tc: "收起圖層列時，名單在原位縮短，不會先衝高。",
@@ -48,9 +50,9 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     id: "2026-10-11-updates-dot",
     date: "2026-10-11",
     kind: "added",
-    en: "Updates shows a dot on the day a line is added.",
-    tc: "當天有新項目時，「更新」顯示一點。",
-    sc: "当天有新项目时，「更新」显示一点。",
+    en: "Updates shows a dot for 24 hours after a line is added.",
+    tc: "新項目加入後的 24 小時內，「更新」顯示一點。",
+    sc: "新项目加入后的 24 小时内，「更新」显示一点。",
   },
   {
     id: "2026-10-11-jordan-track",
@@ -895,6 +897,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
 ]
 
 const HONG_KONG = "Asia/Hong_Kong"
+const DAY_MS = 24 * 60 * 60 * 1000
 
 export function changelogDayKey(now: Date): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -905,9 +908,18 @@ export function changelogDayKey(now: Date): string {
   }).format(now)
 }
 
-export function changelogIsFresh(entries: readonly { date: string }[], now = new Date()): boolean {
-  const newest = entries[0]?.date
-  return newest !== undefined && newest === changelogDayKey(now)
+export function changelogPublishedAt(entry: { date: string; at?: string }): number {
+  if (entry.at) return Date.parse(entry.at)
+  return Date.parse(`${entry.date}T00:00:00+08:00`)
+}
+
+export function changelogIsFresh(entries: readonly { date: string; at?: string }[], now = new Date()): boolean {
+  const newest = entries[0]
+  if (!newest) return false
+  const published = changelogPublishedAt(newest)
+  if (Number.isNaN(published)) return false
+  const age = now.getTime() - published
+  return age >= 0 && age < DAY_MS
 }
 
 export function changelogText(entry: ChangelogEntry, locale: Locale): string {

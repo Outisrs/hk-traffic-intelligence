@@ -21,4 +21,11 @@ assert.equal(changelogIsFresh(today, new Date("2026-10-11T16:00:00Z")), false)
 assert.equal(changelogIsFresh(today, new Date("2026-10-10T16:00:00Z")), true)
 assert.equal(changelogIsFresh([], new Date("2026-10-11T04:00:00Z")), false)
 
+const stamped = [{ date: "2026-10-11", at: "2026-10-11T16:13:11Z" }]
+assert.equal(changelogIsFresh(stamped, new Date("2026-10-11T17:41:00Z")), true)
+assert.equal(changelogIsFresh(stamped, new Date("2026-10-12T16:13:10Z")), true)
+assert.equal(changelogIsFresh(stamped, new Date("2026-10-12T16:13:11Z")), false)
+assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-11T17:41:00Z")), true)
+assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-12T16:13:11Z")), false)
+
 console.log("changelog ok")
