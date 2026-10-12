@@ -125,6 +125,17 @@ const head = button.parentElement
 assert.equal(head?.className, "city-card-head")
 assert.equal(head?.children[0]?.className, "city-card-title")
 assert.equal(head?.children[1], button)
+
+const lined = card()
+const linedHead = lined.querySelector(".city-card-head")
+const detail = document.createElement("p")
+detail.className = "city-card-detail"
+linedHead?.append(detail)
+stampPlaceStar(lined, place, false, { star: "Star", starred: "Starred", placesFull: "The place list is full." }, () => [])
+const linedKids = linedHead?.children ?? []
+assert.equal(linedKids[0]?.className, "city-card-title")
+assert.equal(linedKids[1]?.className, "city-card-head-star")
+assert.equal(linedKids[2], detail)
 button.click()
 assert.equal(button.ariaPressed, "true")
 assert.equal(button.ariaLabel, "Starred")

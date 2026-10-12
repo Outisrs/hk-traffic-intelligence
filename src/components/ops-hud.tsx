@@ -640,9 +640,9 @@ function PlacesMenu(props: {
         aria-haspopup="dialog"
         aria-label={props.copy.places}
         onClick={() => setOpen((current) => !current)}
-        className={`inline-flex items-center gap-1 border px-1.5 py-1 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+        className={`inline-flex items-center justify-center border px-1.5 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
       >
-        <StarIcon filled={open || props.places.length > 0} className="size-3" />
+        <StarIcon filled={open || props.places.length > 0} className="block size-[1.5em]" />
         {props.places.length > 0 ? <span className="font-[family-name:var(--font-hud)] text-xs tabular-nums">{props.places.length}</span> : null}
       </button>
       {open && box
