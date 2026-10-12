@@ -25,7 +25,7 @@ export function stampPlaceStar(
     paintPlaceStar(button, now, copy)
     if (!was && !now) button.title = copy.placesFull
   })
-  head.insertBefore(button, title)
+  head.append(button)
 }
 
 export function paintPlaceStar(button: HTMLButtonElement, starred: boolean, copy: { star: string; starred: string }): void {
