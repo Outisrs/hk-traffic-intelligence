@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-12-place-find",
+    date: "2026-10-12",
+    at: "2026-10-12T17:12:00Z",
+    kind: "added",
+    en: "Type a place name and the map moves in on it.",
+    tc: "輸入地點名稱，地圖會拉近到那裡。",
+    sc: "输入地点名称，地图会拉近到那里。",
+  },
+  {
     id: "2026-10-12-place-zoom",
     date: "2026-10-12",
     at: "2026-10-12T16:53:00Z",

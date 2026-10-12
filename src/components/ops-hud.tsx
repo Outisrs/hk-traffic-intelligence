@@ -346,6 +346,15 @@ export function OpsHud(props: OpsHudProps) {
               </button>
             ))}
           </div>
+          <PlaceFind
+            copy={m}
+            onOpen={(place) => props.onFocus({
+              id: `find-${place.layer}-${place.id}`,
+              coordinates: place.coordinates,
+              layer: place.layer,
+              zoom: PLACE_FOCUS_ZOOM,
+            })}
+          />
           <div className="flex items-stretch gap-1">
           <button
             type="button"
@@ -592,6 +601,72 @@ export function OpsHud(props: OpsHudProps) {
       </section>
     </div>
   )
+}
+
+function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => void }) {
+  const { locale } = useI18n()
+  const [query, setQuery] = useState("")
+  const [places, setPlaces] = useState<PlaceFindRow[]>([])
+  const latest = useRef("")
+  useEffect(() => {
+    const needle = query.trim()
+    latest.current = needle
+    if (needle.length < 2) {
+      setPlaces([])
+      return
+    }
+    const asked = needle
+    const handle = window.setTimeout(() => {
+      void fetch(`/api/find?q=${encodeURIComponent(asked)}`)
+        .then((response) => response.json())
+        .then((body: { ok?: boolean; places?: PlaceFindRow[] }) => {
+          if (latest.current !== asked) return
+          setPlaces(body.ok && Array.isArray(body.places) ? body.places : [])
+        })
+        .catch(() => {
+          if (latest.current === asked) setPlaces([])
+        })
+    }, 300)
+    return () => window.clearTimeout(handle)
+  }, [query])
+  return (
+    <div className="relative min-w-0">
+      <input
+        value={query}
+        placeholder={props.copy.placeFind}
+        aria-label={props.copy.placeFind}
+        onChange={(event) => setQuery(event.target.value)}
+        className={`${BAR_CHIP} w-28 bg-transparent text-white placeholder:text-cyan-100/50 sm:w-36`}
+      />
+      {places.length > 0 ? (
+        <ol className="absolute left-0 z-50 mt-1 max-h-64 w-56 overflow-y-auto border border-cyan-200/30 bg-[#041018] text-sm text-white">
+          {places.map((place) => (
+            <li key={`${place.layer}-${place.id}`}>
+              <button
+                type="button"
+                className="block w-full px-2 py-1.5 text-left"
+                onClick={() => {
+                  props.onOpen(place)
+                  setQuery("")
+                  setPlaces([])
+                }}
+              >
+                {displayText(locale, place.nameTc, place.nameEn)}
+              </button>
+            </li>
+          ))}
+        </ol>
+      ) : null}
+    </div>
+  )
+}
+
+type PlaceFindRow = {
+  layer: WatchLayer
+  id: string
+  nameTc: string
+  nameEn: string
+  coordinates: [number, number]
 }
 
 function PlacesMenu(props: {

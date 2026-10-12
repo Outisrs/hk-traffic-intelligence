@@ -137,6 +137,7 @@ export type Messages = {
   share: string
   shared: string
   places: string
+  placeFind: string
   placesEmpty: string
   placesFull: string
   star: string
@@ -373,6 +374,7 @@ const en: Messages = {
   share: "Share",
   shared: "Copied",
   places: "Places",
+  placeFind: "Find a place",
   placesEmpty: "Star a place to keep it in this browser.",
   placesFull: "The place list is full.",
   star: "Star",
@@ -609,6 +611,7 @@ const zhHK: Messages = {
   share: "分享",
   shared: "已複製",
   places: "地點",
+  placeFind: "找地點",
   placesEmpty: "收藏地點後，會留在這個瀏覽器。",
   placesFull: "地點名單已滿。",
   star: "收藏",
@@ -841,6 +844,7 @@ const zhCN: Messages = {
   share: "分享",
   shared: "已复制",
   places: "地点",
+  placeFind: "找地点",
   placesEmpty: "收藏地点后，会留在这个浏览器。",
   placesFull: "地点名单已满。",
   star: "收藏",
