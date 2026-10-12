@@ -9,8 +9,9 @@ export function stampPlaceStar(
   copy: { star: string; starred: string; placesFull: string },
   onToggle: (place: Favourite) => readonly Favourite[],
 ): void {
-  const head = root.querySelector(".city-card-head")
-  if (!head) return
+  const title = root.querySelector(".city-card-title")
+  const parent = title?.parentElement
+  if (!title || !parent) return
   const button = document.createElement("button")
   button.type = "button"
   button.className = "city-card-head-star"
@@ -24,7 +25,10 @@ export function stampPlaceStar(
     paintPlaceStar(button, now, copy)
     if (!was && !now) button.title = copy.placesFull
   })
-  head.append(button)
+  const row = document.createElement("div")
+  row.className = "city-card-name"
+  parent.insertBefore(row, title)
+  row.append(button, title)
 }
 
 export function paintPlaceStar(button: HTMLButtonElement, starred: boolean, copy: { star: string; starred: string }): void {

@@ -18,9 +18,9 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     date: "2026-10-12",
     at: "2026-10-12T13:03:08Z",
     kind: "added",
-    en: "Star a place to keep it in this browser. The star on the bar opens the list.",
-    tc: "為地點加上星星，留在這個瀏覽器。列上的星星打開名單。",
-    sc: "为地点加上星星，留在这个浏览器。列上的星星打开名单。",
+    en: "Save a place with the star. The star on the bar opens the list.",
+    tc: "用星星收藏地點。上方的星星打開名單。",
+    sc: "用星星收藏地点。上方的星星打开名单。",
   },
   {
     id: "2026-10-12-huanggang-pin",

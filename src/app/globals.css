@@ -454,15 +454,10 @@ html[data-locale="zh-CN"] .city-card {
 }
 
 .city-card-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 4px 8px;
   padding-right: 32px;
 }
 
 .city-card-kind {
-  flex: 1 1 100%;
   margin: 0 0 2px;
   color: #526170;
   font-size: 11px;
@@ -472,14 +467,17 @@ html[data-locale="zh-CN"] .city-card {
   text-transform: uppercase;
 }
 
+.city-card-name {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
 .city-card-head-star {
   display: grid;
-  flex: 0 0 auto;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  margin-left: auto;
-  align-self: flex-start;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -513,8 +511,6 @@ html[data-locale="zh-CN"] .city-card {
 }
 
 .city-card-title {
-  flex: 1 1 auto;
-  min-width: 0;
   margin: 0;
   font-size: 15px;
   font-weight: 600;

@@ -10,7 +10,9 @@ type DomNode = {
   ariaPressed: string
   ariaLabel: string
   title: string
+  parentElement: DomNode | null
   append: (...items: DomNode[]) => void
+  insertBefore: (child: DomNode, before: DomNode) => void
   replaceChildren: (...items: DomNode[]) => void
   setAttribute: (name: string, value: string) => void
   addEventListener: (type: string, listener: (event: { preventDefault: () => void; stopPropagation: () => void }) => void) => void
@@ -31,8 +33,20 @@ function createElement(tag?: string): DomNode {
   node.ariaPressed = "false"
   node.ariaLabel = ""
   node.title = ""
+  node.parentElement = null
   node.append = (...items) => {
-    node.children.push(...items)
+    for (const item of items) {
+      if (item.parentElement) item.parentElement.children = item.parentElement.children.filter((child) => child !== item)
+      item.parentElement = node
+      node.children.push(item)
+    }
+  }
+  node.insertBefore = (child, before) => {
+    if (child.parentElement) child.parentElement.children = child.parentElement.children.filter((item) => item !== child)
+    const index = node.children.indexOf(before)
+    child.parentElement = node
+    if (index < 0) node.children.push(child)
+    else node.children.splice(index, 0, child)
   }
   node.replaceChildren = (...items) => {
     node.children = [...items]
@@ -56,6 +70,8 @@ function createElement(tag?: string): DomNode {
     }
     if (selector === "svg") return find(node, (child) => child.tag === "svg")
     if (selector === ".city-card-head") return find(node, (child) => child.className === "city-card-head")
+    if (selector === ".city-card-title") return find(node, (child) => child.className === "city-card-title")
+    if (selector === ".city-card-name") return find(node, (child) => child.className === "city-card-name")
     return null
   }
   return node
@@ -76,8 +92,17 @@ const documentStub = {
 }
 Object.assign(globalThis, { document: documentStub, HTMLButtonElement: HTMLButtonElementStub })
 
-const root = document.createElement("article")
-root.append(document.createElement("header"))
+function card(): DomNode {
+  const root = document.createElement("article")
+  const head = document.createElement("header")
+  const title = document.createElement("h2")
+  title.className = "city-card-title"
+  head.append(title)
+  root.append(head)
+  return root
+}
+
+const root = card()
 const place = {
   layer: "kmb" as const,
   id: "JORDAN",
@@ -96,6 +121,10 @@ assert.equal(button.ariaPressed, "false")
 assert.equal(button.ariaLabel, "Star")
 assert.equal(button.textContent, "")
 assert.ok(button.querySelector("svg"))
+const name = button.parentElement
+assert.equal(name?.className, "city-card-name")
+assert.equal(name?.children[0], button)
+assert.equal(name?.children[1]?.className, "city-card-title")
 button.click()
 assert.equal(button.ariaPressed, "true")
 assert.equal(button.ariaLabel, "Starred")
@@ -103,8 +132,7 @@ assert.equal(button.textContent, "")
 button.click()
 assert.equal(button.ariaPressed, "false")
 
-const fullRoot = document.createElement("article")
-fullRoot.append(document.createElement("header"))
+const fullRoot = card()
 stampPlaceStar(fullRoot, place, false, { star: "Star", starred: "Starred", placesFull: "The place list is full." }, () => [])
 const fullButton = fullRoot.querySelector("button")
 assert.ok(fullButton instanceof HTMLButtonElement)
