@@ -2,12 +2,16 @@ import assert from "node:assert/strict"
 import {
   PLACES_LIMIT,
   favouriteFromHit,
+  loadPlaces,
   mergePlaces,
+  PLACES_KEY,
   placesFile,
   placesFromFile,
   readPlaces,
+  savePlaces,
   togglePlace,
   type Favourite,
+  type PlaceStore,
 } from "./favourites.ts"
 
 const jordan: Favourite = {
@@ -72,5 +76,36 @@ const meter = favouriteFromHit(
 )
 assert.equal(meter?.nameTc, "彌敦道")
 assert.equal(meter?.nameEn, "Nathan Road")
+
+function memoryStore(seed: string | null): PlaceStore & { raw: string | null } {
+  const box = { raw: seed }
+  return {
+    get raw() {
+      return box.raw
+    },
+    set raw(value: string | null) {
+      box.raw = value
+    },
+    getItem(key: string) {
+      return key === PLACES_KEY ? box.raw : null
+    },
+    setItem(key: string, value: string) {
+      if (key !== PLACES_KEY) return
+      box.raw = value
+    },
+  }
+}
+
+const store = memoryStore(null)
+assert.deepEqual(loadPlaces(store), [])
+assert.equal(savePlaces(store, [jordan]), true)
+assert.deepEqual(loadPlaces(store), [jordan])
+const refusing: PlaceStore = {
+  getItem: () => null,
+  setItem: () => {
+    throw new Error("private")
+  },
+}
+assert.equal(savePlaces(refusing, [jordan]), false)
 
 console.log("favourites ok")

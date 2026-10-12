@@ -162,3 +162,27 @@ function text(properties: GeoJSON.GeoJsonProperties, key: string): string {
   const value = properties?.[key]
   return typeof value === "string" ? value : typeof value === "number" ? String(value) : ""
 }
+
+export const PLACES_KEY = "hk-traffic-places"
+
+export type PlaceStore = {
+  getItem(key: string): string | null
+  setItem(key: string, value: string): void
+}
+
+export function loadPlaces(store: PlaceStore): Favourite[] {
+  try {
+    return readPlaces(store.getItem(PLACES_KEY))
+  } catch {
+    return []
+  }
+}
+
+export function savePlaces(store: PlaceStore, places: readonly Favourite[]): boolean {
+  try {
+    store.setItem(PLACES_KEY, JSON.stringify(readPlaces(JSON.stringify({ places }))))
+    return true
+  } catch {
+    return false
+  }
+}
