@@ -640,7 +640,7 @@ function PlacesMenu(props: {
         aria-haspopup="dialog"
         aria-label={props.copy.places}
         onClick={() => setOpen((current) => !current)}
-        className={`inline-flex h-8 items-center gap-1 border px-1.5 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+        className={`inline-flex items-center gap-1 border px-1.5 py-1 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
       >
         <StarIcon filled={open || props.places.length > 0} />
         {props.places.length > 0 ? <span className="font-[family-name:var(--font-hud)] text-xs tabular-nums">{props.places.length}</span> : null}
@@ -1016,7 +1016,7 @@ function PlaceList(props: {
                 <span className="block text-sm leading-5 text-white">{displayText(props.copy.locale, place.nameTc, place.nameEn)}</span>
                 <span className="block text-xs leading-4 text-cyan-100/70">{layerLabel(place.layer, props.copy)}</span>
               </button>
-              <button type="button" aria-label={props.copy.starred} aria-pressed="true" onClick={() => props.onRemove(place)} className="mt-1 grid size-7 shrink-0 place-items-center text-[#e2b340]">
+              <button type="button" aria-label={props.copy.starred} aria-pressed="true" onClick={() => props.onRemove(place)} className="relative mt-2.5 grid size-4 shrink-0 place-items-center text-[#e2b340] before:absolute before:inset-[-6px] before:content-['']">
                 <StarIcon filled />
               </button>
             </li>

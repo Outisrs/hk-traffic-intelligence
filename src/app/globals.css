@@ -467,18 +467,38 @@ html[data-locale="zh-CN"] .city-card {
   text-transform: uppercase;
 }
 
-.city-card-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.city-card-head:has(.city-card-head-star) {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: start;
+}
+
+.city-card-head:has(.city-card-kind) .city-card-kind {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.city-card-head:has(.city-card-head-star) .city-card-title {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+}
+
+.city-card-head:not(:has(.city-card-kind)) .city-card-head-star,
+.city-card-head:not(:has(.city-card-kind)) .city-card-title {
+  grid-row: 1;
 }
 
 .city-card-head-star {
+  position: relative;
   display: grid;
-  flex: 0 0 auto;
+  grid-column: 1;
+  grid-row: 2;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -486,10 +506,21 @@ html[data-locale="zh-CN"] .city-card {
   cursor: pointer;
 }
 
+.city-card-head-star::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
 .city-card-head-star svg {
   width: 16px;
   height: 16px;
   display: block;
+}
+
+.city-card-head-star:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 .city-card-head-star[aria-pressed="true"] {
