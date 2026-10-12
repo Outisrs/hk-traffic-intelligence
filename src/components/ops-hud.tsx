@@ -3,11 +3,22 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react"
 import { createPortal } from "react-dom"
 import { Fold, FoldMark } from "@/components/fold-mark"
+import { layerLabel } from "@/components/layer-dock"
 import { useI18n } from "@/components/locale"
 import { boundaryGlance } from "@/lib/control-points"
 import { crossingsFrom, nearestApproach } from "@/lib/crossings"
 import { displayText, formatClock, LOCALE_MARK, LOCALES, type Messages } from "@/lib/i18n"
 import { CHANGELOG, changelogIsFresh, changelogText } from "@/lib/changelog"
+import {
+  mergePlaces,
+  placesFile,
+  placesFromFile,
+  placesSnapshot,
+  replacePlaces,
+  subscribePlaces,
+  togglePlace,
+  type Favourite,
+} from "@/lib/favourites"
 import type { BoardFault } from "@/lib/board-status"
 import { layerForIntel } from "@/lib/intel-focus"
 import { firstOpenBoundary, INTEL_TABS, intelBoard, type IntelItem, type IntelTab } from "@/lib/intel"
@@ -86,6 +97,7 @@ export function OpsHud(props: OpsHudProps) {
   const { locale, setLocale, messages: m } = useI18n()
   const clock = useHongKongClock(locale)
   const prefs = useSyncExternalStore(subscribePreferences, preferenceSnapshot, preferenceServerSnapshot)
+  const places = useSyncExternalStore(subscribePlaces, placesSnapshot, () => [])
   const tab = prefs.intelTab
   const setTab = (next: IntelTab) => updatePreference({ intelTab: next })
   const barOpen = prefs.barOpen
@@ -543,6 +555,19 @@ export function OpsHud(props: OpsHudProps) {
           >
             {tab === "notes" ? (
               <ChangelogList />
+            ) : tab === "places" ? (
+              <PlaceList
+                places={places}
+                copy={m}
+                onOpen={(place) => props.onFocus({
+                  id: `place-${place.layer}-${place.id}`,
+                  coordinates: place.coordinates,
+                  layer: place.layer,
+                })}
+                onRemove={(place) => replacePlaces(togglePlace(places, place))}
+                onExport={() => downloadPlaces(places)}
+                onImport={(raw) => replacePlaces(mergePlaces(places, placesFromFile(raw)))}
+              />
             ) : intel.length === 0 ? (
               <p className="px-1 py-2 text-sm text-zinc-300">{emptyCopy(tab, m)}</p>
             ) : (
@@ -742,6 +767,8 @@ function tabLabel(id: IntelTab, m: Messages): string {
       return m.systems
     case "notes":
       return m.changelog
+    case "places":
+      return m.places
     default: {
       const exhaustive: never = id
       return exhaustive
@@ -862,11 +889,68 @@ function emptyCopy(tab: IntelTab, m: ReturnType<typeof useI18n>["messages"]): st
       return m.emptySystems
     case "notes":
       return m.changelog
+    case "places":
+      return m.placesEmpty
     default: {
       const exhaustive: never = tab
       return exhaustive
     }
   }
+}
+
+function PlaceList(props: {
+  places: readonly Favourite[]
+  copy: Messages
+  onOpen: (place: Favourite) => void
+  onRemove: (place: Favourite) => void
+  onExport: () => void
+  onImport: (raw: string) => void
+}) {
+  const input = useRef<HTMLInputElement>(null)
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-1">
+        <button type="button" onClick={props.onExport} className="border border-white/15 px-2 py-1 text-xs text-cyan-50">{props.copy.placesExport}</button>
+        <button type="button" onClick={() => input.current?.click()} className="border border-white/15 px-2 py-1 text-xs text-cyan-50">{props.copy.placesImport}</button>
+        <input
+          ref={input}
+          type="file"
+          accept="application/json,.json"
+          className="hidden"
+          onChange={(event) => {
+            const file = event.target.files?.[0]
+            event.target.value = ""
+            if (!file) return
+            void file.text().then((raw) => props.onImport(raw))
+          }}
+        />
+      </div>
+      {props.places.length === 0 ? (
+        <p className="px-1 py-2 text-sm text-zinc-300">{props.copy.placesEmpty}</p>
+      ) : (
+        <ol className="flex flex-col gap-1">
+          {props.places.map((place) => (
+            <li key={`${place.layer}-${place.id}`} className="flex items-center gap-2">
+              <button type="button" onClick={() => props.onOpen(place)} className="min-w-0 flex-1 px-1 py-1 text-left text-sm text-white">
+                <span className="block text-[0.62rem] tracking-[0.14em] text-cyan-100/80 uppercase">{layerLabel(place.layer, props.copy)}</span>
+                {displayText(props.copy.locale, place.nameTc, place.nameEn)}
+              </button>
+              <button type="button" aria-pressed="true" onClick={() => props.onRemove(place)} className="city-card-star">{props.copy.starred}</button>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  )
+}
+
+function downloadPlaces(places: readonly Favourite[]): void {
+  const href = URL.createObjectURL(new Blob([placesFile(places)], { type: "application/json" }))
+  const link = document.createElement("a")
+  link.href = href
+  link.download = "hk-traffic-places.json"
+  link.click()
+  URL.revokeObjectURL(href)
 }
 
 function useHongKongClock(locale: ReturnType<typeof useI18n>["locale"]): string {

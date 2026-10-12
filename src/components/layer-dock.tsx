@@ -40,7 +40,7 @@ const SPEED_KEY = [
   { color: "#FF5D73", key: "bad" },
 ] as const
 
-function layerLabel(id: WatchLayer, m: Messages): string {
+export function layerLabel(id: WatchLayer, m: Messages): string {
   switch (id) {
     case "speed":
       return m.speedLayer
