@@ -228,7 +228,7 @@ type CityMapProps = {
   layers: WatchLayers
   basemap: Basemap
   flyToken: number
-  focus: { id: string; coordinates: [number, number] } | null
+  focus: { id: string; coordinates: [number, number]; zoom?: number } | null
   onMap: (available: boolean) => void
   disabled?: boolean
 }
@@ -596,9 +596,11 @@ export function CityMap({
     cancelFlyRef.current?.()
     closeCardRef.current?.()
     map.stop()
+    const floor = basemapRef.current === "buildings" && !narrowScreen() ? 15.6 : 14.2
+    const requested = focus.zoom ?? floor
     map.flyTo({
       center: focus.coordinates,
-      zoom: Math.max(map.getZoom(), basemapRef.current === "buildings" && !narrowScreen() ? 15.6 : 14.2),
+      zoom: Math.max(map.getZoom(), requested),
       duration: narrowScreen() ? 250 : 900,
       essential: true,
     })

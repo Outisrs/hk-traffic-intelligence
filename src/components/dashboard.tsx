@@ -144,7 +144,7 @@ export function Dashboard() {
   const trafficLoading = traffic === null && trafficLive.error === null
   const trafficError = trafficLive.error ?? (traffic && !traffic.ok ? traffic.error ?? "Speed feed failed" : null)
   const pictureError = pictureLive.error ?? picture?.error ?? (picture && !picture.ok ? "Picture failed" : null)
-  const [focus, setFocus] = useState<{ id: string; coordinates: [number, number] } | null>(null)
+  const [focus, setFocus] = useState<{ id: string; coordinates: [number, number]; zoom?: number } | null>(null)
   const [only, setOnly] = useState(false)
   const intelChoice = prefs.intelOpen
   const intelOpen = intelCardOpen(phone, intelChoice)
@@ -157,8 +157,8 @@ export function Dashboard() {
     updatePreference({ layers: next })
   }
 
-  function focusIntel(next: { id: string; coordinates: [number, number]; layer: WatchLayer | null }) {
-    setFocus({ id: next.id, coordinates: next.coordinates })
+  function focusIntel(next: { id: string; coordinates: [number, number]; layer: WatchLayer | null; zoom?: number }) {
+    setFocus({ id: next.id, coordinates: next.coordinates, zoom: next.zoom })
     const opened = layersForIntel(next.layer, layers, only)
     if (opened.only !== only) setOnly(opened.only)
     if (opened.layers !== layers) setLayers(opened.layers)

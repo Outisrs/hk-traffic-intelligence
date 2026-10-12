@@ -24,6 +24,7 @@ import { layerForIntel } from "@/lib/intel-focus"
 import { firstOpenBoundary, INTEL_TABS, intelBoard, type IntelItem, type IntelTab } from "@/lib/intel"
 import { INTEL_PHONE_QUERY, preferenceServerSnapshot, preferenceSnapshot, subscribePreferences, updatePreference } from "@/lib/preferences"
 import { formatSpeed } from "@/lib/speed"
+import { placePinZoom } from "@/lib/kmb-view"
 import type { ApproachPoint, ApproachesResponse, HarbourJourney, TrafficResponse, WatchLayer, WeatherConditions, WeatherWarning } from "@/lib/types"
 import { weatherBar } from "@/lib/warnings"
 
@@ -56,7 +57,7 @@ type OpsHudProps = {
   open: boolean
   choice: boolean | null
   onOpenChange: (open: boolean) => void
-  onFocus: (focus: { id: string; coordinates: [number, number]; layer: WatchLayer | null }) => void
+  onFocus: (focus: { id: string; coordinates: [number, number]; layer: WatchLayer | null; zoom?: number }) => void
   view: { lng: number; lat: number; zoom: number } | null
 }
 
@@ -563,6 +564,7 @@ export function OpsHud(props: OpsHudProps) {
                   id: `place-${place.layer}-${place.id}`,
                   coordinates: place.coordinates,
                   layer: place.layer,
+                  zoom: placePinZoom(place.layer, null, preferenceSnapshot().basemap),
                 })}
                 onRemove={(place) => replacePlaces(togglePlace(places, place))}
                 onExport={() => downloadPlaces(places)}
