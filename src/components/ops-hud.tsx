@@ -640,12 +640,12 @@ function PlacesMenu(props: {
         aria-haspopup="dialog"
         aria-label={props.copy.places}
         onClick={() => setOpen((current) => !current)}
-        className={`inline-flex h-8 items-center gap-1 border px-1.5 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+        className={`inline-flex items-center gap-1 border px-1.5 py-1 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
       >
-        <StarIcon filled={open || props.places.length > 0} />
+        <StarIcon filled={open || props.places.length > 0} className="size-3" />
         {props.places.length > 0 ? <span className="font-[family-name:var(--font-hud)] text-xs tabular-nums">{props.places.length}</span> : null}
       </button>
-      {box
+      {open && box
         ? createPortal(
             <div
               ref={menuRef}
@@ -673,9 +673,9 @@ function PlacesMenu(props: {
   )
 }
 
-function StarIcon(props: { filled: boolean }) {
+function StarIcon(props: { filled: boolean; className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4">
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={props.className ?? "size-4"}>
       <path
         d={STAR_PATH}
         fill={props.filled ? "currentColor" : "none"}
