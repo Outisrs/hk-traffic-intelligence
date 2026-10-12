@@ -469,15 +469,16 @@ html[data-locale="zh-CN"] .city-card {
 
 .city-card-name {
   display: flex;
-  align-items: flex-start;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
 }
 
 .city-card-head-star {
   display: grid;
+  flex: 0 0 auto;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -486,8 +487,8 @@ html[data-locale="zh-CN"] .city-card {
 }
 
 .city-card-head-star svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: block;
 }
 

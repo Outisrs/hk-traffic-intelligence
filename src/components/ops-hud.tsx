@@ -1006,9 +1006,26 @@ function PlaceList(props: {
   const [importFault, setImportFault] = useState(false)
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-1">
-        <button type="button" onClick={props.onExport} className="border border-white/15 px-2 py-1 text-xs text-cyan-50">{props.copy.placesExport}</button>
-        <button type="button" onClick={() => input.current?.click()} className="border border-white/15 px-2 py-1 text-xs text-cyan-50">{props.copy.placesImport}</button>
+      {props.places.length === 0 ? (
+        <p className="px-1 py-2 text-sm text-zinc-300">{props.copy.placesEmpty}</p>
+      ) : (
+        <ol className="flex flex-col">
+          {props.places.map((place) => (
+            <li key={`${place.layer}-${place.id}`} className="flex items-start gap-2 border-t border-white/10 first:border-t-0">
+              <button type="button" onClick={() => props.onOpen(place)} className="min-w-0 flex-1 px-1 py-2 text-left">
+                <span className="block text-sm leading-5 text-white">{displayText(props.copy.locale, place.nameTc, place.nameEn)}</span>
+                <span className="block text-xs leading-4 text-cyan-100/70">{layerLabel(place.layer, props.copy)}</span>
+              </button>
+              <button type="button" aria-label={props.copy.starred} aria-pressed="true" onClick={() => props.onRemove(place)} className="mt-1 grid size-7 shrink-0 place-items-center text-[#e2b340]">
+                <StarIcon filled />
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
+      <div className="flex gap-1 border-t border-white/10 pt-2">
+        <button type="button" onClick={props.onExport} className="px-1 py-1 text-xs text-cyan-100/80">{props.copy.placesExport}</button>
+        <button type="button" onClick={() => input.current?.click()} className="px-1 py-1 text-xs text-cyan-100/80">{props.copy.placesImport}</button>
         <input
           ref={input}
           type="file"
@@ -1031,23 +1048,6 @@ function PlaceList(props: {
         />
       </div>
       {importFault ? <p className="px-1 text-xs text-[#FF5D73]">{props.copy.placesImportFailed}</p> : null}
-      {props.places.length === 0 ? (
-        <p className="px-1 py-2 text-sm text-zinc-300">{props.copy.placesEmpty}</p>
-      ) : (
-        <ol className="flex flex-col gap-1">
-          {props.places.map((place) => (
-            <li key={`${place.layer}-${place.id}`} className="flex items-center gap-2">
-              <button type="button" onClick={() => props.onOpen(place)} className="min-w-0 flex-1 px-1 py-1 text-left text-sm text-white">
-                <span className="block text-[0.62rem] tracking-[0.14em] text-cyan-100/80 uppercase">{layerLabel(place.layer, props.copy)}</span>
-                {displayText(props.copy.locale, place.nameTc, place.nameEn)}
-              </button>
-              <button type="button" aria-label={props.copy.starred} aria-pressed="true" onClick={() => props.onRemove(place)} className="grid size-7 place-items-center text-[#e2b340]">
-                <StarIcon filled />
-              </button>
-            </li>
-          ))}
-        </ol>
-      )}
     </div>
   )
 }
