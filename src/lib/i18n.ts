@@ -136,6 +136,13 @@ export type Messages = {
   creditGitHub: string
   share: string
   shared: string
+  places: string
+  placesEmpty: string
+  placesFull: string
+  star: string
+  starred: string
+  placesExport: string
+  placesImport: string
   satellite: string
   streets: string
   buildings: string
@@ -364,6 +371,13 @@ const en: Messages = {
   creditGitHub: "GitHub",
   share: "Share",
   shared: "Copied",
+  places: "Places",
+  placesEmpty: "Star a place to keep it in this browser.",
+  placesFull: "The place list is full.",
+  star: "Star",
+  starred: "Starred",
+  placesExport: "Export",
+  placesImport: "Import",
   satellite: "Satellite",
   streets: "Streets",
   buildings: "Buildings",
@@ -592,6 +606,13 @@ const zhHK: Messages = {
   creditGitHub: "GitHub",
   share: "分享",
   shared: "已複製",
+  places: "地點",
+  placesEmpty: "為地點加星，留在這個瀏覽器。",
+  placesFull: "地點名單已滿。",
+  star: "加星",
+  starred: "已加星",
+  placesExport: "匯出",
+  placesImport: "匯入",
   satellite: "衛星",
   streets: "街道",
   buildings: "樓宇",
@@ -816,6 +837,13 @@ const zhCN: Messages = {
   creditGitHub: "GitHub",
   share: "分享",
   shared: "已复制",
+  places: "地点",
+  placesEmpty: "为地点加星，留在这个浏览器。",
+  placesFull: "地点名单已满。",
+  star: "加星",
+  starred: "已加星",
+  placesExport: "导出",
+  placesImport: "导入",
   satellite: "卫星",
   streets: "街道",
   buildings: "楼宇",
