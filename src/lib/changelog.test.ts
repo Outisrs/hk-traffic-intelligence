@@ -25,7 +25,8 @@ const stamped = [{ date: "2026-10-11", at: "2026-10-11T16:13:11Z" }]
 assert.equal(changelogIsFresh(stamped, new Date("2026-10-11T17:41:00Z")), true)
 assert.equal(changelogIsFresh(stamped, new Date("2026-10-12T16:13:10Z")), true)
 assert.equal(changelogIsFresh(stamped, new Date("2026-10-12T16:13:11Z")), false)
-assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-11T18:10:00Z")), true)
-assert.equal(changelogIsFresh(CHANGELOG, new Date("2026-10-12T18:05:00Z")), false)
+const published = Date.parse(CHANGELOG[0]?.at ?? `${CHANGELOG[0]?.date ?? ""}T00:00:00+08:00`)
+assert.equal(changelogIsFresh(CHANGELOG, new Date(published + 60_000)), true)
+assert.equal(changelogIsFresh(CHANGELOG, new Date(published + 24 * 60 * 60 * 1000)), false)
 
 console.log("changelog ok")

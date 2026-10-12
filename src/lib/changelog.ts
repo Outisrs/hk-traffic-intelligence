@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-12-huanggang",
+    date: "2026-10-12",
+    at: "2026-10-12T04:45:00Z",
+    kind: "fixed",
+    en: "The boundary list shows Huanggang. Lok Ma Chau passenger clearance has stopped.",
+    tc: "管制站顯示皇崗。落馬洲旅檢已經停止。",
+    sc: "管制站显示皇岗。落马洲旅检已经停止。",
+  },
+  {
     id: "2026-10-12-card-kind",
     date: "2026-10-12",
     at: "2026-10-11T18:05:00Z",

@@ -949,7 +949,7 @@ const CONTROL_NAMES: Record<Locale, Record<string, string>> = {
   en: {
     HYW: "Heung Yuen Wai",
     HZM: "Hong Kong-Zhuhai-Macao Bridge",
-    LMC: "Lok Ma Chau",
+    HGP: "Huanggang",
     LSC: "Lok Ma Chau Spur Line",
     LWS: "Lo Wu",
     MKT: "Man Kam To",
@@ -959,7 +959,7 @@ const CONTROL_NAMES: Record<Locale, Record<string, string>> = {
   "zh-HK": {
     HYW: "香園圍",
     HZM: "港珠澳大橋",
-    LMC: "落馬洲",
+    HGP: "皇崗",
     LSC: "落馬洲支線",
     LWS: "羅湖",
     MKT: "文錦渡",
@@ -969,7 +969,7 @@ const CONTROL_NAMES: Record<Locale, Record<string, string>> = {
   "zh-CN": {
     HYW: "香园围",
     HZM: "港珠澳大桥",
-    LMC: "落马洲",
+    HGP: "皇岗",
     LSC: "落马洲支线",
     LWS: "罗湖",
     MKT: "文锦渡",
