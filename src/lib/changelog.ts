@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-12-places",
+    date: "2026-10-12",
+    at: "2026-10-12T13:03:08Z",
+    kind: "added",
+    en: "Star a place to keep it in this browser. Open Places to return to it.",
+    tc: "為地點加星，留在這個瀏覽器。打開「地點」可回到那裡。",
+    sc: "为地点加星，留在这个浏览器。打开「地点」可回到那里。",
+  },
+  {
     id: "2026-10-12-huanggang-pin",
     date: "2026-10-12",
     at: "2026-10-12T04:58:00Z",
