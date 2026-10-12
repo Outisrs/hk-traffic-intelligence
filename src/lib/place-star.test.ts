@@ -38,8 +38,8 @@ function createElement(tag?: string): DomNode {
     for (const listener of listeners) listener(event)
   }
   node.querySelector = (selector) => {
-    if (selector === "button.city-card-star" || selector === "button") {
-      const found = find(node, (child) => child.tag === "button" && child.className.includes("city-card-star"))
+    if (selector === "button.city-card-head-star" || selector === "button.city-card-star" || selector === "button") {
+      const found = find(node, (child) => child.tag === "button" && (child.className.includes("city-card-head-star") || child.className.includes("city-card-star")))
       if (found) return found
       if (selector === "button") return find(node, (child) => child.tag === "button")
     }
@@ -78,7 +78,7 @@ stampPlaceStar(root, place, false, { star: "Star", starred: "Starred", placesFul
   nextStarred = !nextStarred
   return nextStarred ? [place] : []
 })
-const button = root.querySelector("button.city-card-star")
+const button = root.querySelector("button.city-card-head-star")
 assert.ok(button instanceof HTMLButtonElement)
 assert.equal(button.ariaPressed, "false")
 assert.equal(button.textContent, "Star")

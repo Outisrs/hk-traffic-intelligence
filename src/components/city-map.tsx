@@ -2556,7 +2556,7 @@ function openFeature(
   if (place) {
     placeListenDrop = subscribePlaces(() => {
       const starred = placesSnapshot().some((item) => item.layer === place.layer && item.id === place.id)
-      const button = root.querySelector("button.city-card-star")
+      const button = root.querySelector("button.city-card-head-star")
       if (!(button instanceof HTMLButtonElement)) return
       const copy = copyRef.current
       paintPlaceStar(button, starred, { star: copy.star, starred: copy.starred })

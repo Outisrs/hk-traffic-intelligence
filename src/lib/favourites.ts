@@ -189,7 +189,12 @@ export function savePlaces(store: PlaceStore, places: readonly Favourite[]): boo
 
 const placeListeners = new Set<() => void>()
 let placeCurrent: Favourite[] = []
+const placesServerSnapshotList: Favourite[] = []
 let placesLoaded = false
+
+export function placesServerSnapshot(): Favourite[] {
+  return placesServerSnapshotList
+}
 
 export function placesSnapshot(): Favourite[] {
   ensurePlaces()
@@ -206,12 +211,22 @@ export function subscribePlaces(listener: () => void): () => void {
 export function replacePlaces(places: readonly Favourite[]): void {
   ensurePlaces()
   placeCurrent = readPlaces(JSON.stringify({ places }))
-  if (typeof window !== "undefined") savePlaces(window.localStorage, placeCurrent)
+  if (typeof window !== "undefined") {
+    try {
+      savePlaces(window.localStorage, placeCurrent)
+    } catch {
+      // A private browser can refuse the write. The choice still applies for this visit.
+    }
+  }
   for (const listener of placeListeners) listener()
 }
 
 function ensurePlaces(): void {
   if (placesLoaded || typeof window === "undefined") return
   placesLoaded = true
-  placeCurrent = loadPlaces(window.localStorage)
+  try {
+    placeCurrent = loadPlaces(window.localStorage)
+  } catch {
+    placeCurrent = []
+  }
 }

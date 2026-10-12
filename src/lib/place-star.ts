@@ -11,7 +11,7 @@ export function stampPlaceStar(
   if (!head) return
   const button = document.createElement("button")
   button.type = "button"
-  button.className = "city-card-star"
+  button.className = "city-card-head-star"
   paintPlaceStar(button, starred, copy)
   button.addEventListener("click", (event) => {
     event.preventDefault()

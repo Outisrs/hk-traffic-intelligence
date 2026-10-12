@@ -13,6 +13,7 @@ import {
   mergePlaces,
   placesFile,
   placesFromFile,
+  placesServerSnapshot,
   placesSnapshot,
   replacePlaces,
   subscribePlaces,
@@ -98,7 +99,7 @@ export function OpsHud(props: OpsHudProps) {
   const { locale, setLocale, messages: m } = useI18n()
   const clock = useHongKongClock(locale)
   const prefs = useSyncExternalStore(subscribePreferences, preferenceSnapshot, preferenceServerSnapshot)
-  const places = useSyncExternalStore(subscribePlaces, placesSnapshot, () => [])
+  const places = useSyncExternalStore(subscribePlaces, placesSnapshot, placesServerSnapshot)
   const tab = prefs.intelTab
   const setTab = (next: IntelTab) => updatePreference({ intelTab: next })
   const barOpen = prefs.barOpen
@@ -952,7 +953,7 @@ function downloadPlaces(places: readonly Favourite[]): void {
   link.href = href
   link.download = "hk-traffic-places.json"
   link.click()
-  URL.revokeObjectURL(href)
+  window.setTimeout(() => URL.revokeObjectURL(href), 5000)
 }
 
 function useHongKongClock(locale: ReturnType<typeof useI18n>["locale"]): string {
