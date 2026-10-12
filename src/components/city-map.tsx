@@ -48,6 +48,8 @@ import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOO
 import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } from "@/lib/meter-poles"
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
 import { carPinsWhenBoth, motorcyclePinsWhenBoth } from "@/lib/parking-parks"
+import { favouriteFromHit, placesSnapshot, replacePlaces, subscribePlaces, togglePlace } from "@/lib/favourites"
+import { stampPlaceStar } from "@/lib/place-star"
 import { soleLayer } from "@/lib/preferences"
 import { displayText, MESSAGES, type Locale, type Messages } from "@/lib/i18n"
 import { MAP_CREDIT } from "@/lib/map-credits"
@@ -1500,7 +1502,7 @@ function bindOverlayClicks(
   for (const layerId of watchLayers) {
     const render = featurePopups[layerId]
     if (!render) continue
-    map.on("click", layerId, (event) => openFeature(showPopup, event, (properties) => render(properties, copyRef.current)))
+    map.on("click", layerId, (event) => openFeature(showPopup, event, (properties) => render(properties, copyRef.current), copyRef))
   }
   for (const layerId of ["corridor-line", ...watchLayers]) {
     map.on("mouseenter", layerId, () => {
@@ -2339,18 +2341,28 @@ function layerIds(kind: WatchLayer): string[] {
   }
 }
 
+let placeListenDrop: (() => void) | null = null
+
+function dropPlaceListen() {
+  placeListenDrop?.()
+  placeListenDrop = null
+}
+
 function popupOpener(map: Map) {
   let active: Popup | null = null
   return {
     show(lngLat: LngLat, content: HTMLElement) {
+      dropPlaceListen()
       active?.remove()
       active = new Popup({ className: "city-popup", closeButton: true, maxWidth: "360px", offset: 16 })
         .setLngLat(lngLat)
         .setDOMContent(content)
         .addTo(map)
+      active.once("close", dropPlaceListen)
       keepCardInView(map, active)
     },
     close() {
+      dropPlaceListen()
       active?.remove()
       active = null
     },
@@ -2523,9 +2535,32 @@ function openFeature(
   showPopup: (lngLat: LngLat, content: HTMLElement) => void,
   event: MapMouseEvent & { features?: MapGeoJSONFeature[] },
   render: (properties: GeoJSON.GeoJsonProperties) => HTMLElement,
+  copyRef: MutableRefObject<Messages>,
 ) {
   const feature = event.features?.[0]
   if (!feature) return
-  showPopup(event.lngLat, render(feature.properties ?? null))
+  const root = render(feature.properties ?? null)
+  const place = favouriteFromHit(feature.layer.id, feature.properties ?? null, feature.geometry)
+  if (place) {
+    const starred = placesSnapshot().some((item) => item.layer === place.layer && item.id === place.id)
+    const copy = copyRef.current
+    stampPlaceStar(root, place, starred, { star: copy.star, starred: copy.starred, placesFull: copy.placesFull }, (chosen) => {
+      const next = togglePlace(placesSnapshot(), chosen)
+      replacePlaces(next)
+      return next
+    })
+  }
+  showPopup(event.lngLat, root)
+  if (place) {
+    placeListenDrop = subscribePlaces(() => {
+      const starred = placesSnapshot().some((item) => item.layer === place.layer && item.id === place.id)
+      const button = root.querySelector("button.city-card-star")
+      if (!(button instanceof HTMLButtonElement)) return
+      const copy = copyRef.current
+      button.ariaPressed = starred ? "true" : "false"
+      button.textContent = starred ? copy.starred : copy.star
+      button.title = ""
+    })
+  }
 }
 

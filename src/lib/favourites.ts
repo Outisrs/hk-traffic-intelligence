@@ -186,3 +186,32 @@ export function savePlaces(store: PlaceStore, places: readonly Favourite[]): boo
     return false
   }
 }
+
+const placeListeners = new Set<() => void>()
+let placeCurrent: Favourite[] = []
+let placesLoaded = false
+
+export function placesSnapshot(): Favourite[] {
+  ensurePlaces()
+  return placeCurrent
+}
+
+export function subscribePlaces(listener: () => void): () => void {
+  placeListeners.add(listener)
+  return () => {
+    placeListeners.delete(listener)
+  }
+}
+
+export function replacePlaces(places: readonly Favourite[]): void {
+  ensurePlaces()
+  placeCurrent = readPlaces(JSON.stringify({ places }))
+  if (typeof window !== "undefined") savePlaces(window.localStorage, placeCurrent)
+  for (const listener of placeListeners) listener()
+}
+
+function ensurePlaces(): void {
+  if (placesLoaded || typeof window === "undefined") return
+  placesLoaded = true
+  placeCurrent = loadPlaces(window.localStorage)
+}
