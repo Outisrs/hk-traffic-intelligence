@@ -633,17 +633,17 @@ function PlacesMenu(props: {
     }
   }, [open])
   return (
-    <div ref={rootRef} className="relative shrink-0">
+    <div ref={rootRef} className="relative flex shrink-0">
       <button
         type="button"
         aria-expanded={open}
         aria-haspopup="dialog"
         aria-label={props.copy.places}
         onClick={() => setOpen((current) => !current)}
-        className={`inline-flex items-center justify-center border px-1.5 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+        className={`flex items-center gap-1.5 border px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] leading-[1.5] ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
       >
-        <StarIcon filled={open || props.places.length > 0} className="block size-[1.5em]" />
-        {props.places.length > 0 ? <span className="font-[family-name:var(--font-hud)] text-xs tabular-nums">{props.places.length}</span> : null}
+        <StarIcon filled={open || props.places.length > 0} className="size-[1lh]" />
+        {props.places.length > 0 ? <span className="tabular-nums">{props.places.length}</span> : null}
       </button>
       {open && box
         ? createPortal(
