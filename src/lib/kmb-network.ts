@@ -42,6 +42,10 @@ export function kmbStop(id: string): StopRecord | null {
   return records[id] ?? null
 }
 
+export function kmbNamedStops(): { id: string; tc: string; en: string; lng: number; lat: number }[] {
+  return Object.entries(records).map(([id, stop]) => ({ id, tc: stop.tc, en: stop.en, lng: stop.lng, lat: stop.lat }))
+}
+
 export function kmbPoleIds(id: string): string[] {
   const stop = records[id]
   if (!stop) return []

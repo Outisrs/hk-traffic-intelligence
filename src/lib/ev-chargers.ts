@@ -28,6 +28,10 @@ const WIDE_RADIUS_M = 80_000
 
 const catalogue = parseChargerPlaces(catalogueFile)
 
+export function chargerNames(): { id: string; nameTc: string; nameEn: string; lng: number; lat: number }[] {
+  return catalogue.map((place) => ({ id: place.id, nameTc: place.nameTc, nameEn: place.nameEn, lng: place.lng, lat: place.lat }))
+}
+
 export function parseChargerPlaces(body: unknown): ChargerPlace[] {
   const rows = body && typeof body === "object" && "places" in body && Array.isArray(body.places) ? body.places : []
   return rows.flatMap((item) => {

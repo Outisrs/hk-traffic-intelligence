@@ -23,6 +23,10 @@ export function nlbStop(id: string): StopRecord | null {
   return network.stops[id] ?? null
 }
 
+export function nlbNamedStops(): { id: string; tc: string; en: string; lng: number; lat: number }[] {
+  return Object.entries(network.stops).map(([id, stop]) => ({ id, tc: stop.tc, en: stop.en, lng: stop.lng, lat: stop.lat }))
+}
+
 export function nlbPoleIds(id: string): string[] {
   const stop = network.stops[id]
   if (!stop) return []

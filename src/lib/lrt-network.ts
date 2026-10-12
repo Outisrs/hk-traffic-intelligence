@@ -29,6 +29,10 @@ export function lrtStation(id: string): StationRecord | null {
   return byId.get(id) ?? null
 }
 
+export function lrtNamedStations(): { id: string; tc: string; en: string; lng: number; lat: number }[] {
+  return stations.map((station) => ({ id: station.id, tc: station.tc, en: station.en, lng: station.lng, lat: station.lat }))
+}
+
 export function lrtStationId(name: string): string | null {
   const key = name.replace(/\s/g, "")
   return byName.get(key) ?? byName.get(name.toLowerCase()) ?? null

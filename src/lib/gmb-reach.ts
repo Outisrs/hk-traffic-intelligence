@@ -28,6 +28,13 @@ export function gmbStop(id: string): StopRecord | null {
   return network.stops[id] ?? null
 }
 
+export function gmbNamedStops(): { id: string; tc: string; en: string; lng: number; lat: number }[] {
+  return Object.entries(network.stops).flatMap(([id, stop]) => {
+    if (!Number.isFinite(stop.lng) || !Number.isFinite(stop.lat)) return []
+    return [{ id, tc: stop.tc, en: stop.en, lng: stop.lng, lat: stop.lat }]
+  })
+}
+
 export function gmbPoleIds(id: string): string[] {
   const stop = network.stops[id]
   if (!stop) return []

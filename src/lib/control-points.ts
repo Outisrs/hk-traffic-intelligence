@@ -27,6 +27,10 @@ const POINTS: { code: ControlPointCode; name: string; coordinates: [number, numb
   { code: "STK", name: "Sha Tau Kok", coordinates: [114.2236, 22.5472] },
 ]
 
+export function controlPlaces(): { code: ControlPointCode; name: string; coordinates: [number, number] }[] {
+  return POINTS
+}
+
 export function controlPointFeatures(resident: QueueFile, visitor: QueueFile): GeoJSON.Feature[] {
   return POINTS.map((point) => {
     const residentArr = queueCode(resident[point.code]?.arrQueue)

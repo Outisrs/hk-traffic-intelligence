@@ -42,6 +42,10 @@ export function stationRecord(code: string): StationRecord | null {
   return network.stations[code] ?? null
 }
 
+export function mtrNamedStations(): { id: string; tc: string; en: string; lng: number; lat: number }[] {
+  return Object.entries(network.stations).map(([id, station]) => ({ id, tc: station.tc, en: station.en, lng: station.lng, lat: station.lat }))
+}
+
 export function lineRecord(code: string): LineRecord | null {
   return network.lines[code] ?? null
 }
