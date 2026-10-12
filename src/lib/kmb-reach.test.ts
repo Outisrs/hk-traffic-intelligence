@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, KMB_MIN_ZOOM, PARK_METER_ZOOM, SOLO_PIN_ZOOM, focusZoom, mapViewKey, parkMeterZoom, placePinZoom } from "./kmb-view.ts"
+import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, KMB_MIN_ZOOM, PARK_METER_ZOOM, PLACE_FOCUS_ZOOM, SOLO_PIN_ZOOM, focusZoom, mapViewKey, parkMeterZoom, placePinZoom } from "./kmb-view.ts"
 import { isListedKmbRow, kmbReachMetres, STOP_CAP } from "./kmb-reach.ts"
 
 const close = kmbReachMetres(16.5, 22.38274)
@@ -29,6 +29,8 @@ assert.equal(placePinZoom("cameras", null, "buildings"), BUILDINGS_PARK_METER_ZO
 assert.equal(placePinZoom("cameras", "cameras"), SOLO_PIN_ZOOM)
 assert.equal(placePinZoom("kerb", null), PARK_METER_ZOOM)
 assert.equal(placePinZoom("mtr", null), KMB_MIN_ZOOM)
+assert.equal(focusZoom(12.55, 14.2, PLACE_FOCUS_ZOOM), PLACE_FOCUS_ZOOM)
+assert.equal(focusZoom(18, 14.2, PLACE_FOCUS_ZOOM), 18)
 assert.equal(focusZoom(12, 14.2, 13), 14.2)
 assert.equal(focusZoom(12, 14.2, 15.7), 15.7)
 assert.equal(focusZoom(16, 14.2, 13), 16)

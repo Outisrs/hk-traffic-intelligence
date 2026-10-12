@@ -10,6 +10,7 @@ export const FLYOVER_END_ZOOM = 13.05
 export const BUILDINGS_FLYOVER_ZOOM = 15.2
 export const PARK_METER_ZOOM = 13.55
 export const BUILDINGS_PARK_METER_ZOOM = 15.7
+export const PLACE_FOCUS_ZOOM = 16.5
 export const KMB_POLL_MS = 60_000
 export const PLACE_POLL_MS = 12 * 60 * 60 * 1000
 

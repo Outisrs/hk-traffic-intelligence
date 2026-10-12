@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-12-place-zoom",
+    date: "2026-10-12",
+    at: "2026-10-12T16:53:00Z",
+    kind: "fixed",
+    en: "Choosing a saved place zooms the map in on it.",
+    tc: "選擇收藏地點時，地圖會拉近。",
+    sc: "选择收藏地点时，地图会拉近。",
+  },
+  {
     id: "2026-10-12-places",
     date: "2026-10-12",
     at: "2026-10-12T13:03:08Z",
