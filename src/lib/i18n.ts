@@ -143,6 +143,7 @@ export type Messages = {
   starred: string
   placesExport: string
   placesImport: string
+  placesImportFailed: string
   satellite: string
   streets: string
   buildings: string
@@ -378,6 +379,7 @@ const en: Messages = {
   starred: "Starred",
   placesExport: "Export",
   placesImport: "Import",
+  placesImportFailed: "That file is not a place list.",
   satellite: "Satellite",
   streets: "Streets",
   buildings: "Buildings",
@@ -613,6 +615,7 @@ const zhHK: Messages = {
   starred: "已加星",
   placesExport: "匯出",
   placesImport: "匯入",
+  placesImportFailed: "這個檔案不是地點名單。",
   satellite: "衛星",
   streets: "街道",
   buildings: "樓宇",
@@ -844,6 +847,7 @@ const zhCN: Messages = {
   starred: "已加星",
   placesExport: "导出",
   placesImport: "导入",
+  placesImportFailed: "这个文件不是地点名单。",
   satellite: "卫星",
   streets: "街道",
   buildings: "楼宇",

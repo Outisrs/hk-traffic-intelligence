@@ -7,6 +7,7 @@ import {
   PLACES_KEY,
   placesFile,
   placesFromFile,
+  readPlacesFile,
   readPlaces,
   savePlaces,
   togglePlace,
@@ -115,5 +116,8 @@ const pier = favouriteFromHit(
 )
 assert.equal(pier?.id, "central")
 assert.equal(favouriteFromHit("ferry-vessels", { id: "boat", nameTc: "船", nameEn: "Boat" }, { type: "Point", coordinates: [114.16, 22.29] }), null)
+assert.deepEqual(readPlacesFile("not json"), { ok: false })
+assert.deepEqual(readPlacesFile(JSON.stringify({ version: 1, places: [jordan] })), { ok: true, places: [jordan] })
+assert.deepEqual(readPlacesFile(JSON.stringify({ version: 1, places: [] })), { ok: true, places: [] })
 
 console.log("favourites ok")

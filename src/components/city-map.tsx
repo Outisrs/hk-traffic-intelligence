@@ -44,7 +44,7 @@ import {
   workPopup,
 } from "@/components/map-cards"
 import { directedRouteMarks, stopPlate, stopPlateKey, type StopPlate } from "@/lib/stop-plate"
-import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, SOLO_PIN_ZOOM, mapViewKey, placePinZoom } from "@/lib/kmb-view"
+import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, SOLO_PIN_ZOOM, focusZoom, mapViewKey, placePinZoom } from "@/lib/kmb-view"
 import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } from "@/lib/meter-poles"
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
 import { carPinsWhenBoth, motorcyclePinsWhenBoth } from "@/lib/parking-parks"
@@ -600,7 +600,7 @@ export function CityMap({
     const requested = focus.zoom ?? floor
     map.flyTo({
       center: focus.coordinates,
-      zoom: Math.max(map.getZoom(), requested),
+      zoom: focusZoom(map.getZoom(), floor, requested),
       duration: narrowScreen() ? 250 : 900,
       essential: true,
     })

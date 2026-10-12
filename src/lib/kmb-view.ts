@@ -40,6 +40,10 @@ export function parkMeterZoom(basemap: Basemap): number {
   }
 }
 
+export function focusZoom(current: number, floor: number, requested?: number): number {
+  return Math.max(current, floor, requested ?? floor)
+}
+
 export function placePinZoom(layer: WatchLayer, sole: WatchLayer | null, basemap: Basemap = "satellite"): number {
   if (sole === layer) return SOLO_PIN_ZOOM
   const pastSweep = parkMeterZoom(basemap)

@@ -96,6 +96,20 @@ export function placesFromFile(raw: string): Favourite[] {
   return readPlaces(raw)
 }
 
+export function readPlacesFile(raw: string): { ok: true; places: Favourite[] } | { ok: false } {
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(raw)
+  } catch {
+    return { ok: false }
+  }
+  if (Array.isArray(parsed)) return { ok: true, places: readPlaces(raw) }
+  if (typeof parsed === "object" && parsed !== null && Array.isArray((parsed as { places?: unknown }).places)) {
+    return { ok: true, places: readPlaces(raw) }
+  }
+  return { ok: false }
+}
+
 export function favouriteFromHit(
   layerId: string,
   properties: GeoJSON.GeoJsonProperties,
@@ -221,8 +235,27 @@ export function replacePlaces(places: readonly Favourite[]): void {
   for (const listener of placeListeners) listener()
 }
 
+let storageBound = false
+
+export function applyExternalPlaces(raw: string | null): void {
+  placesLoaded = true
+  placeCurrent = readPlaces(raw)
+  for (const listener of placeListeners) listener()
+}
+
+function bindStorage(): void {
+  if (storageBound || typeof window === "undefined" || typeof window.addEventListener !== "function") return
+  storageBound = true
+  window.addEventListener("storage", (event: StorageEvent) => {
+    if (event.key !== PLACES_KEY) return
+    applyExternalPlaces(event.newValue)
+  })
+}
+
 function ensurePlaces(): void {
-  if (placesLoaded || typeof window === "undefined") return
+  if (typeof window === "undefined") return
+  bindStorage()
+  if (placesLoaded) return
   placesLoaded = true
   try {
     placeCurrent = loadPlaces(window.localStorage)

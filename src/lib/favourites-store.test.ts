@@ -5,6 +5,7 @@ import {
   placesSnapshot,
   replacePlaces,
   subscribePlaces,
+  applyExternalPlaces,
   type Favourite,
 } from "./favourites.ts"
 
@@ -81,5 +82,14 @@ assert.deepEqual(
   }),
   [huanggang],
 )
+
+let externalRuns = 0
+const stopExternal = subscribePlaces(() => {
+  externalRuns += 1
+})
+applyExternalPlaces(JSON.stringify([jordan]))
+assert.equal(externalRuns, 1)
+assert.deepEqual(placesSnapshot(), [jordan])
+stopExternal()
 
 console.log("favourites store ok")

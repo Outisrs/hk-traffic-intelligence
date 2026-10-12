@@ -12,9 +12,9 @@ import { CHANGELOG, changelogIsFresh, changelogText } from "@/lib/changelog"
 import {
   mergePlaces,
   placesFile,
-  placesFromFile,
   placesServerSnapshot,
   placesSnapshot,
+  readPlacesFile,
   replacePlaces,
   subscribePlaces,
   togglePlace,
@@ -569,7 +569,7 @@ export function OpsHud(props: OpsHudProps) {
                 })}
                 onRemove={(place) => replacePlaces(togglePlace(places, place))}
                 onExport={() => downloadPlaces(places)}
-                onImport={(raw) => replacePlaces(mergePlaces(places, placesFromFile(raw)))}
+                onImport={(incoming) => replacePlaces(mergePlaces(places, incoming))}
               />
             ) : intel.length === 0 ? (
               <p className="px-1 py-2 text-sm text-zinc-300">{emptyCopy(tab, m)}</p>
@@ -907,9 +907,10 @@ function PlaceList(props: {
   onOpen: (place: Favourite) => void
   onRemove: (place: Favourite) => void
   onExport: () => void
-  onImport: (raw: string) => void
+  onImport: (places: readonly Favourite[]) => void
 }) {
   const input = useRef<HTMLInputElement>(null)
+  const [importFault, setImportFault] = useState(false)
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-1">
@@ -924,10 +925,19 @@ function PlaceList(props: {
             const file = event.target.files?.[0]
             event.target.value = ""
             if (!file) return
-            void file.text().then((raw) => props.onImport(raw))
+            void file.text().then((raw) => {
+              const incoming = readPlacesFile(raw)
+              if (!incoming.ok) {
+                setImportFault(true)
+                return
+              }
+              setImportFault(false)
+              props.onImport(incoming.places)
+            }).catch(() => setImportFault(true))
           }}
         />
       </div>
+      {importFault ? <p className="px-1 text-xs text-[#FF5D73]">{props.copy.placesImportFailed}</p> : null}
       {props.places.length === 0 ? (
         <p className="px-1 py-2 text-sm text-zinc-300">{props.copy.placesEmpty}</p>
       ) : (

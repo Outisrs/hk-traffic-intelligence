@@ -458,7 +458,7 @@ html[data-locale="zh-CN"] .city-card {
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 4px 8px;
-  padding-right: 0;
+  padding-right: 32px;
 }
 
 .city-card-kind {
