@@ -1,5 +1,7 @@
 import type { Favourite } from "@/lib/favourites"
 
+export const STAR_PATH = "M12 1.8 14.9 8l6.8.6-5.2 4.4 1.6 6.6L12 16.2 5.9 19.6 7.5 13 2.3 8.6 9.1 8 12 1.8z"
+
 export function stampPlaceStar(
   root: HTMLElement,
   place: Favourite,
@@ -27,6 +29,22 @@ export function stampPlaceStar(
 
 export function paintPlaceStar(button: HTMLButtonElement, starred: boolean, copy: { star: string; starred: string }): void {
   button.ariaPressed = starred ? "true" : "false"
-  button.textContent = starred ? copy.starred : copy.star
+  button.ariaLabel = starred ? copy.starred : copy.star
   button.title = ""
+  button.textContent = ""
+  button.replaceChildren(starGlyph(starred))
+}
+
+function starGlyph(starred: boolean): SVGElement {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+  svg.setAttribute("viewBox", "0 0 24 24")
+  svg.setAttribute("aria-hidden", "true")
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path")
+  path.setAttribute("d", STAR_PATH)
+  path.setAttribute("fill", starred ? "currentColor" : "none")
+  path.setAttribute("stroke", "currentColor")
+  path.setAttribute("stroke-width", starred ? "0" : "1.6")
+  path.setAttribute("stroke-linejoin", "round")
+  svg.append(path)
+  return svg
 }

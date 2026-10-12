@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent }
 import { createPortal } from "react-dom"
 import { Fold, FoldMark } from "@/components/fold-mark"
 import { layerLabel } from "@/components/layer-dock"
+import { STAR_PATH } from "@/lib/place-star"
 import { useI18n } from "@/components/locale"
 import { boundaryGlance } from "@/lib/control-points"
 import { crossingsFrom, nearestApproach } from "@/lib/crossings"
@@ -351,6 +352,19 @@ export function OpsHud(props: OpsHudProps) {
           >
             <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
+          <PlacesMenu
+            places={places}
+            copy={m}
+            onOpen={(place) => props.onFocus({
+              id: `place-${place.layer}-${place.id}`,
+              coordinates: place.coordinates,
+              layer: place.layer,
+              zoom: placePinZoom(place.layer, null, preferenceSnapshot().basemap),
+            })}
+            onRemove={(place) => replacePlaces(togglePlace(places, place))}
+            onExport={() => downloadPlaces(places)}
+            onImport={(incoming) => replacePlaces(mergePlaces(places, incoming))}
+          />
         </div>
         <div className="flex min-w-0 flex-1 items-center gap-1">
           {origin ? (
@@ -557,20 +571,6 @@ export function OpsHud(props: OpsHudProps) {
           >
             {tab === "notes" ? (
               <ChangelogList />
-            ) : tab === "places" ? (
-              <PlaceList
-                places={places}
-                copy={m}
-                onOpen={(place) => props.onFocus({
-                  id: `place-${place.layer}-${place.id}`,
-                  coordinates: place.coordinates,
-                  layer: place.layer,
-                  zoom: placePinZoom(place.layer, null, preferenceSnapshot().basemap),
-                })}
-                onRemove={(place) => replacePlaces(togglePlace(places, place))}
-                onExport={() => downloadPlaces(places)}
-                onImport={(incoming) => replacePlaces(mergePlaces(places, incoming))}
-              />
             ) : intel.length === 0 ? (
               <p className="px-1 py-2 text-sm text-zinc-300">{emptyCopy(tab, m)}</p>
             ) : (
@@ -587,6 +587,103 @@ export function OpsHud(props: OpsHudProps) {
         </Fold>
       </section>
     </div>
+  )
+}
+
+function PlacesMenu(props: {
+  places: readonly Favourite[]
+  copy: Messages
+  onOpen: (place: Favourite) => void
+  onRemove: (place: Favourite) => void
+  onExport: () => void
+  onImport: (places: readonly Favourite[]) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [box, setBox] = useState<{ top: number; left: number; width: number; maxHeight: number } | null>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const place = () => {
+      const rect = rootRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const width = Math.min(320, window.innerWidth - 16)
+      const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8))
+      const top = Math.round(rect.bottom + 4)
+      setBox({ top, left: Math.round(left), width: Math.round(width), maxHeight: Math.max(160, window.innerHeight - top - 8) })
+    }
+    place()
+    window.addEventListener("resize", place)
+    return () => window.removeEventListener("resize", place)
+  }, [open])
+  useEffect(() => {
+    if (!open) return
+    const close = (event: MouseEvent) => {
+      const target = event.target as Node
+      if (!rootRef.current?.contains(target) && !menuRef.current?.contains(target)) setOpen(false)
+    }
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false)
+    }
+    document.addEventListener("mousedown", close)
+    document.addEventListener("keydown", onKey)
+    return () => {
+      document.removeEventListener("mousedown", close)
+      document.removeEventListener("keydown", onKey)
+    }
+  }, [open])
+  return (
+    <div ref={rootRef} className="relative shrink-0">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        aria-label={props.copy.places}
+        onClick={() => setOpen((current) => !current)}
+        className={`inline-flex h-8 items-center gap-1 border px-1.5 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+      >
+        <StarIcon filled={open || props.places.length > 0} />
+        {props.places.length > 0 ? <span className="font-[family-name:var(--font-hud)] text-xs tabular-nums">{props.places.length}</span> : null}
+      </button>
+      {box
+        ? createPortal(
+            <div
+              ref={menuRef}
+              role="dialog"
+              aria-label={props.copy.places}
+              className="fixed z-50 border border-cyan-200/30 bg-[#041018] p-2 text-sm text-white shadow-[0_0_24px_rgba(34,211,238,0.12)]"
+              style={{ top: box.top, left: box.left, width: box.width, maxHeight: box.maxHeight, overflowY: "auto" }}
+            >
+              <PlaceList
+                places={props.places}
+                copy={props.copy}
+                onOpen={(place) => {
+                  props.onOpen(place)
+                  setOpen(false)
+                }}
+                onRemove={props.onRemove}
+                onExport={props.onExport}
+                onImport={props.onImport}
+              />
+            </div>,
+            document.body,
+          )
+        : null}
+    </div>
+  )
+}
+
+function StarIcon(props: { filled: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4">
+      <path
+        d={STAR_PATH}
+        fill={props.filled ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeWidth={props.filled ? 0 : 1.6}
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }
 
@@ -770,8 +867,6 @@ function tabLabel(id: IntelTab, m: Messages): string {
       return m.systems
     case "notes":
       return m.changelog
-    case "places":
-      return m.places
     default: {
       const exhaustive: never = id
       return exhaustive
@@ -892,8 +987,6 @@ function emptyCopy(tab: IntelTab, m: ReturnType<typeof useI18n>["messages"]): st
       return m.emptySystems
     case "notes":
       return m.changelog
-    case "places":
-      return m.placesEmpty
     default: {
       const exhaustive: never = tab
       return exhaustive
@@ -948,7 +1041,9 @@ function PlaceList(props: {
                 <span className="block text-[0.62rem] tracking-[0.14em] text-cyan-100/80 uppercase">{layerLabel(place.layer, props.copy)}</span>
                 {displayText(props.copy.locale, place.nameTc, place.nameEn)}
               </button>
-              <button type="button" aria-pressed="true" onClick={() => props.onRemove(place)} className="city-card-star">{props.copy.starred}</button>
+              <button type="button" aria-label={props.copy.starred} aria-pressed="true" onClick={() => props.onRemove(place)} className="grid size-7 place-items-center text-[#e2b340]">
+                <StarIcon filled />
+              </button>
             </li>
           ))}
         </ol>

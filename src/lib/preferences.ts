@@ -25,7 +25,7 @@ const LAYER_IDS: readonly WatchLayer[] = [
   "charger",
 ]
 
-const TABS = ["ranked", "roads", "boundary", "weather", "systems", "notes", "places"] as const
+const TABS = ["ranked", "roads", "boundary", "weather", "systems", "notes"] as const
 
 export type IntelTabPreference = (typeof TABS)[number]
 

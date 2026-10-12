@@ -473,24 +473,28 @@ html[data-locale="zh-CN"] .city-card {
 }
 
 .city-card-head-star {
+  display: grid;
   flex: 0 0 auto;
+  place-items: center;
+  width: 28px;
+  height: 28px;
   margin-left: auto;
   align-self: flex-start;
-  border: 1px solid #526170;
-  border-radius: 2px;
-  background: #f4f7fa;
-  color: #102033;
-  font: 600 11px/1 var(--font-hud), sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 3px 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #8aa0b2;
   cursor: pointer;
 }
 
+.city-card-head-star svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
 .city-card-head-star[aria-pressed="true"] {
-  border-color: #0d7a4d;
-  background: #e8f8ef;
-  color: #0a5c38;
+  color: #c8962e;
 }
 
 .city-card-star {

@@ -8,8 +8,11 @@ type DomNode = {
   tag: string
   type: string
   ariaPressed: string
+  ariaLabel: string
   title: string
   append: (...items: DomNode[]) => void
+  replaceChildren: (...items: DomNode[]) => void
+  setAttribute: (name: string, value: string) => void
   addEventListener: (type: string, listener: (event: { preventDefault: () => void; stopPropagation: () => void }) => void) => void
   click: () => void
   querySelector: (selector: string) => DomNode | null
@@ -26,9 +29,17 @@ function createElement(tag?: string): DomNode {
   node.textContent = ""
   node.children = []
   node.ariaPressed = "false"
+  node.ariaLabel = ""
   node.title = ""
   node.append = (...items) => {
     node.children.push(...items)
+  }
+  node.replaceChildren = (...items) => {
+    node.children = [...items]
+  }
+  node.setAttribute = (name, value) => {
+    if (name === "aria-label") node.ariaLabel = value
+    if (name === "aria-hidden") return
   }
   node.addEventListener = (type, listener) => {
     if (type === "click") listeners.push(listener)
@@ -43,10 +54,8 @@ function createElement(tag?: string): DomNode {
       if (found) return found
       if (selector === "button") return find(node, (child) => child.tag === "button")
     }
-    if (selector === ".city-card-head") {
-      const head = find(node, (child) => child.className === "city-card-head")
-      if (head) return head
-    }
+    if (selector === "svg") return find(node, (child) => child.tag === "svg")
+    if (selector === ".city-card-head") return find(node, (child) => child.className === "city-card-head")
     return null
   }
   return node
@@ -61,7 +70,10 @@ function find(root: DomNode, match: (node: DomNode) => boolean): DomNode | null 
   return null
 }
 
-const documentStub = { createElement }
+const documentStub = {
+  createElement,
+  createElementNS: (_namespace: string, tag: string) => createElement(tag),
+}
 Object.assign(globalThis, { document: documentStub, HTMLButtonElement: HTMLButtonElementStub })
 
 const root = document.createElement("article")
@@ -81,10 +93,13 @@ stampPlaceStar(root, place, false, { star: "Star", starred: "Starred", placesFul
 const button = root.querySelector("button.city-card-head-star")
 assert.ok(button instanceof HTMLButtonElement)
 assert.equal(button.ariaPressed, "false")
-assert.equal(button.textContent, "Star")
+assert.equal(button.ariaLabel, "Star")
+assert.equal(button.textContent, "")
+assert.ok(button.querySelector("svg"))
 button.click()
 assert.equal(button.ariaPressed, "true")
-assert.equal(button.textContent, "Starred")
+assert.equal(button.ariaLabel, "Starred")
+assert.equal(button.textContent, "")
 button.click()
 assert.equal(button.ariaPressed, "false")
 
