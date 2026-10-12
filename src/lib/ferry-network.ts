@@ -17,6 +17,7 @@ export function ferryPierFeatures(clock: FerryResponse | null): GeoJSON.FeatureC
       type: "Feature",
       geometry: { type: "Point", coordinates: [pier.lng, pier.lat] },
       properties: {
+        id: pier.id,
         nameTc: pier.nameTc,
         nameEn: pier.nameEn,
         routes: JSON.stringify([]),

@@ -108,4 +108,12 @@ const refusing: PlaceStore = {
 }
 assert.equal(savePlaces(refusing, [jordan]), false)
 
+const pier = favouriteFromHit(
+  "ferry-piers",
+  { id: "central", nameTc: "中環", nameEn: "Central" },
+  { type: "Point", coordinates: [114.16, 22.29] },
+)
+assert.equal(pier?.id, "central")
+assert.equal(favouriteFromHit("ferry-vessels", { id: "boat", nameTc: "船", nameEn: "Boat" }, { type: "Point", coordinates: [114.16, 22.29] }), null)
+
 console.log("favourites ok")
