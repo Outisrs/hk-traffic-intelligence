@@ -19,7 +19,7 @@ const VEHICLE_ROADS: Record<ControlPointCode, string[]> = {
 const POINTS: { code: ControlPointCode; name: string; coordinates: [number, number] }[] = [
   { code: "HYW", name: "Heung Yuen Wai", coordinates: [114.1516, 22.5592] },
   { code: "HZM", name: "Hong Kong-Zhuhai-Macao Bridge", coordinates: [113.9542, 22.3166] },
-  { code: "HGP", name: "Huanggang", coordinates: [114.07496, 22.52074] },
+  { code: "HGP", name: "Huanggang", coordinates: [114.06773, 22.52319] },
   { code: "LSC", name: "Lok Ma Chau Spur Line", coordinates: [114.0655, 22.5143] },
   { code: "LWS", name: "Lo Wu", coordinates: [114.1133, 22.5281] },
   { code: "MKT", name: "Man Kam To", coordinates: [114.1291, 22.5376] },

@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-12-huanggang-pin",
+    date: "2026-10-12",
+    at: "2026-10-12T04:58:00Z",
+    kind: "fixed",
+    en: "The Huanggang pin sits on the new joint-inspection building, north of the river.",
+    tc: "皇崗的點放在新聯檢大樓，深圳河以北。",
+    sc: "皇岗的点放在新联检大楼，深圳河以北。",
+  },
+  {
     id: "2026-10-12-huanggang",
     date: "2026-10-12",
     at: "2026-10-12T04:45:00Z",
