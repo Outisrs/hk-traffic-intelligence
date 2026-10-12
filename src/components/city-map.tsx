@@ -49,7 +49,7 @@ import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } 
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
 import { carPinsWhenBoth, motorcyclePinsWhenBoth } from "@/lib/parking-parks"
 import { favouriteFromHit, placesSnapshot, replacePlaces, subscribePlaces, togglePlace } from "@/lib/favourites"
-import { stampPlaceStar } from "@/lib/place-star"
+import { paintPlaceStar, stampPlaceStar } from "@/lib/place-star"
 import { soleLayer } from "@/lib/preferences"
 import { displayText, MESSAGES, type Locale, type Messages } from "@/lib/i18n"
 import { MAP_CREDIT } from "@/lib/map-credits"
@@ -2557,9 +2557,7 @@ function openFeature(
       const button = root.querySelector("button.city-card-star")
       if (!(button instanceof HTMLButtonElement)) return
       const copy = copyRef.current
-      button.ariaPressed = starred ? "true" : "false"
-      button.textContent = starred ? copy.starred : copy.star
-      button.title = ""
+      paintPlaceStar(button, starred, { star: copy.star, starred: copy.starred })
     })
   }
 }
