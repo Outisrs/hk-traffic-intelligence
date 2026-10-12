@@ -12,6 +12,7 @@ type DomNode = {
   title: string
   parentElement: DomNode | null
   append: (...items: DomNode[]) => void
+  insertAdjacentElement: (position: string, child: DomNode) => void
   insertBefore: (child: DomNode, before: DomNode) => void
   replaceChildren: (...items: DomNode[]) => void
   setAttribute: (name: string, value: string) => void
@@ -40,6 +41,14 @@ function createElement(tag?: string): DomNode {
       item.parentElement = node
       node.children.push(item)
     }
+  }
+  node.insertAdjacentElement = (position: string, child: DomNode) => {
+    const parent = node.parentElement
+    if (!parent || position !== "afterend") return
+    const index = parent.children.indexOf(node)
+    const following = parent.children[index + 1]
+    if (following) parent.insertBefore(child, following)
+    else parent.append(child)
   }
   node.insertBefore = (child, before) => {
     if (child.parentElement) child.parentElement.children = child.parentElement.children.filter((item) => item !== child)

@@ -473,7 +473,6 @@ html[data-locale="zh-CN"] .city-card {
 }
 
 .city-card-head-star {
-  position: relative;
   display: inline-grid;
   place-items: center;
   width: 16px;
@@ -485,12 +484,6 @@ html[data-locale="zh-CN"] .city-card {
   vertical-align: middle;
   color: #8aa0b2;
   cursor: pointer;
-}
-
-.city-card-head-star::before {
-  content: "";
-  position: absolute;
-  inset: -6px;
 }
 
 .city-card-head-star svg {
@@ -506,21 +499,6 @@ html[data-locale="zh-CN"] .city-card {
 
 .city-card-head-star[aria-pressed="true"] {
   color: #c8962e;
-}
-
-.city-card-star {
-  margin-left: auto;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: transparent;
-  color: #e7fbff;
-  font: 600 11px/1 var(--font-hud), sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 2px 6px;
-}
-
-.city-card-star[aria-pressed="true"] {
-  color: #3ddc97;
 }
 
 .city-card-title {

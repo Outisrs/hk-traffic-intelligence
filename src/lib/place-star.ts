@@ -25,10 +25,7 @@ export function stampPlaceStar(
     paintPlaceStar(button, now, copy)
     if (!was && !now) button.title = copy.placesFull
   })
-  const children = Array.from(head.children)
-  const following = children[children.indexOf(title) + 1]
-  if (following) head.insertBefore(button, following)
-  else head.append(button)
+  title.insertAdjacentElement("afterend", button)
 }
 
 export function paintPlaceStar(button: HTMLButtonElement, starred: boolean, copy: { star: string; starred: string }): void {

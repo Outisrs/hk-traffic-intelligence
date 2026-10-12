@@ -70,6 +70,8 @@ const TONE: Record<HarbourJourney["colour"], string> = {
   none: "#C9D2DC",
 }
 
+const BAR_CHIP = "shrink-0 items-center gap-1.5 border px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em]"
+
 const BAR_KEY = {
   CH: "cross",
   EH: "eastern",
@@ -344,11 +346,12 @@ export function OpsHud(props: OpsHudProps) {
               </button>
             ))}
           </div>
+          <div className="flex items-stretch gap-1">
           <button
             type="button"
             aria-expanded={open && tab === "notes"}
             onClick={() => show("notes", undefined)}
-            className="hidden shrink-0 items-center gap-1.5 border border-cyan-200/50 bg-cyan-300/10 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 sm:inline-flex"
+            className={`hidden sm:inline-flex ${BAR_CHIP} border-cyan-200/50 bg-cyan-300/10 text-cyan-50`}
           >
             <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
@@ -365,6 +368,7 @@ export function OpsHud(props: OpsHudProps) {
             onExport={() => downloadPlaces(places)}
             onImport={(incoming) => replacePlaces(mergePlaces(places, incoming))}
           />
+          </div>
         </div>
         <div className="flex min-w-0 flex-1 items-center gap-1">
           {origin ? (
@@ -603,7 +607,10 @@ function PlacesMenu(props: {
   const rootRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      setBox(null)
+      return
+    }
     const place = () => {
       const rect = rootRef.current?.getBoundingClientRect()
       if (!rect) return
@@ -640,12 +647,12 @@ function PlacesMenu(props: {
         aria-haspopup="dialog"
         aria-label={props.copy.places}
         onClick={() => setOpen((current) => !current)}
-        className={`flex items-center gap-1.5 border px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] leading-[1.5] ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+        className={`flex h-full ${BAR_CHIP} ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
       >
-        <StarIcon filled={open || props.places.length > 0} className="size-[1lh]" />
+        <StarIcon filled={open || props.places.length > 0} className="size-[1em]" />
         {props.places.length > 0 ? <span className="tabular-nums">{props.places.length}</span> : null}
       </button>
-      {open && box
+      {box
         ? createPortal(
             <div
               ref={menuRef}
