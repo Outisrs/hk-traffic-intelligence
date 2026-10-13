@@ -343,7 +343,7 @@ export function OpsHud(props: OpsHudProps) {
             type="button"
             aria-expanded={open && tab === "notes"}
             onClick={() => show("notes", undefined)}
-            className="bar-chip hidden shrink-0 items-center gap-1.5 border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:inline-flex"
+            className="bar-chip hidden border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:inline-flex"
           >
             <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
@@ -435,7 +435,7 @@ export function OpsHud(props: OpsHudProps) {
             type="button"
             aria-expanded={open && tab === "notes"}
             onClick={() => show("notes", undefined)}
-            className="bar-chip inline-flex shrink-0 items-center gap-1.5 border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:hidden"
+            className="bar-chip border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:hidden"
           >
             <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
@@ -526,7 +526,7 @@ export function OpsHud(props: OpsHudProps) {
             aria-expanded={props.choice === true}
             aria-controls="harbour-intel-list"
             onClick={() => changeOpen(true)}
-            className="bar-chip ml-1 inline-flex shrink-0 items-center gap-1 border-white/15 text-cyan-50 uppercase"
+            className="bar-chip ml-1 border-white/15 text-cyan-50 uppercase"
           >
             {m.intel}
             <FoldMark open={false} />
@@ -567,7 +567,7 @@ export function OpsHud(props: OpsHudProps) {
               aria-expanded={open}
               aria-controls="harbour-intel-list"
               onClick={() => changeOpen(false)}
-              className="bar-chip ml-auto inline-flex shrink-0 items-center gap-1 border-white/15 text-cyan-50 uppercase"
+              className="bar-chip ml-auto border-white/15 text-cyan-50 uppercase"
             >
               {m.hide}
               <FoldMark open />
@@ -805,7 +805,7 @@ function PlacesMenu(props: {
         aria-haspopup="dialog"
         aria-label={props.copy.places}
         onClick={() => setOpen((current) => !current)}
-        className={`bar-chip flex h-full shrink-0 items-center gap-1.5 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+        className={`bar-chip h-full ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
       >
         <StarIcon filled={open || props.places.length > 0} className="size-[1em]" />
         {props.places.length > 0 ? <span className="tabular-nums">{props.places.length}</span> : null}
