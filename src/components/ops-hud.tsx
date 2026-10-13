@@ -441,6 +441,21 @@ export function OpsHud(props: OpsHudProps) {
           >
             <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
+          <div className="inline-flex shrink-0 border border-white/15 sm:hidden" role="group" aria-label={m.language}>
+            {LOCALES.map((item) => (
+              <button
+                key={`narrow-${item}`}
+                type="button"
+                aria-pressed={locale === item}
+                onClick={() => setLocale(item)}
+                className={`px-1.5 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] ${
+                  locale === item ? "bg-white/10 text-white" : "text-cyan-100/70"
+                }`}
+              >
+                {LOCALE_MARK[item]}
+              </button>
+            ))}
+          </div>
           </div>
           <button
             type="button"
@@ -462,7 +477,7 @@ export function OpsHud(props: OpsHudProps) {
               ) : null}
             </div>
           </button>
-          <div className="inline-flex shrink-0 border border-white/15" role="group" aria-label={m.language}>
+          <div className="hidden shrink-0 border border-white/15 sm:inline-flex" role="group" aria-label={m.language}>
             {LOCALES.map((item) => (
               <button
                 key={item}
