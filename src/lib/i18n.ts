@@ -49,6 +49,7 @@ export type Messages = {
   minutes: (n: number) => string
   approachHint: (road: string) => string
   harbourFrom: string
+  harbourNear: string
   fromIsland: string
   fromKowloon: string
   followMap: (road: string) => string
@@ -286,9 +287,10 @@ const en: Messages = {
   minutes: (n) => `${n} min`,
   approachHint: (road) => `${road}. Show this approach on the map.`,
   harbourFrom: "From",
+  harbourNear: "From · Nearest",
   fromIsland: "Hong Kong Island",
   fromKowloon: "Kowloon",
-  followMap: (road) => road ? `Nearest sign · ${road}` : "Nearest sign on the map",
+  followMap: (road) => road ? `Nearest · ${road}` : "Nearest sign on the map",
   fastestHere: "Fastest of the three tunnels from this sign",
   slowerBy: (n) => `${n} min slower than the fastest`,
   harbourMissing: "n/a",
@@ -523,6 +525,7 @@ const zhHK: Messages = {
   minutes: (n) => `${n} 分鐘`,
   approachHint: (road) => `${road}。在地圖顯示此進路口。`,
   harbourFrom: "起點",
+  harbourNear: "起點 · 地圖最近",
   fromIsland: "港島出發",
   fromKowloon: "九龍出發",
   followMap: (road) => road ? `地圖最近 · ${road}` : "地圖上最近的路口",
@@ -758,6 +761,7 @@ const zhCN: Messages = {
   minutes: (n) => `${n} 分钟`,
   approachHint: (road) => `${road}。在地图显示此进路口。`,
   harbourFrom: "起点",
+  harbourNear: "起点 · 地图最近",
   fromIsland: "港岛出发",
   fromKowloon: "九龙出发",
   followMap: (road) => road ? `地图最近 · ${road}` : "地图上最近的路口",

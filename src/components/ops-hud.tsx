@@ -636,7 +636,7 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
         placeholder={props.copy.placeFind}
         aria-label={props.copy.placeFind}
         onChange={(event) => setQuery(event.target.value)}
-        className={`${BAR_CHIP} w-28 bg-transparent text-white placeholder:text-cyan-100/50 sm:w-36`}
+        className={`${BAR_CHIP} w-16 bg-transparent text-white placeholder:text-cyan-100/50`}
       />
       {places.length > 0 ? (
         <ol className="absolute left-0 z-50 mt-1 max-h-64 w-56 overflow-y-auto border border-cyan-200/30 bg-[#041018] text-sm text-white">
@@ -829,10 +829,10 @@ function OriginMenu(props: {
         onClick={() => setOpen((current) => !current)}
         className="block max-w-28 border border-white/10 bg-black/30 px-1 py-1 text-left sm:max-w-56 sm:px-2"
       >
-        <span className="block font-[family-name:var(--font-hud)] text-[0.58rem] tracking-[0.14em] text-cyan-100/80 uppercase">{m.harbourFrom}</span>
+        <span className="block font-[family-name:var(--font-hud)] text-[0.58rem] tracking-[0.14em] text-cyan-100/80 uppercase">{props.pinnedId ? m.harbourFrom : m.harbourNear}</span>
         <span className="flex items-center gap-1">
           <span className="truncate font-[family-name:var(--font-hud)] text-sm leading-none text-white sm:text-base">
-            {props.pinnedId ? road : m.followMap(road)}
+            {road}
           </span>
           <FoldMark open={open} />
         </span>

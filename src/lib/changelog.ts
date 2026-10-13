@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-near-sign",
+    date: "2026-10-13",
+    at: "2026-10-13T00:48:00Z",
+    kind: "fixed",
+    en: "The harbour sign reads From · Nearest, and the road name sits on the line below.",
+    tc: "起點寫成起點 · 地圖最近，路名單獨放在下一行。",
+    sc: "起点写成起点 · 地图最近，路名单独放在下一行。",
+  },
+  {
     id: "2026-10-12-place-find",
     date: "2026-10-12",
     at: "2026-10-12T17:12:00Z",
