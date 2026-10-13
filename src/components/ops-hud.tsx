@@ -27,6 +27,7 @@ import { firstOpenBoundary, INTEL_TABS, intelBoard, type IntelItem, type IntelTa
 import { INTEL_PHONE_QUERY, preferenceServerSnapshot, preferenceSnapshot, subscribePreferences, updatePreference } from "@/lib/preferences"
 import { formatSpeed } from "@/lib/speed"
 import { PLACE_FOCUS_ZOOM } from "@/lib/kmb-view"
+import { placeFieldUnits } from "@/lib/place-find"
 import type { ApproachPoint, ApproachesResponse, HarbourJourney, TrafficResponse, WatchLayer, WeatherConditions, WeatherWarning } from "@/lib/types"
 import { weatherBar } from "@/lib/warnings"
 
@@ -607,7 +608,13 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
   const { locale } = useI18n()
   const [query, setQuery] = useState("")
   const [places, setPlaces] = useState<PlaceFindRow[]>([])
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState(0)
+  const [box, setBox] = useState<{ top: number; left: number; width: number; maxHeight: number } | null>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
   const latest = useRef("")
+  const shown = open && places.length > 0
   useEffect(() => {
     const needle = query.trim()
     latest.current = needle
@@ -622,6 +629,7 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
         .then((body: { ok?: boolean; places?: PlaceFindRow[] }) => {
           if (latest.current !== asked) return
           setPlaces(body.ok && Array.isArray(body.places) ? body.places : [])
+          setActive(0)
         })
         .catch(() => {
           if (latest.current === asked) setPlaces([])
@@ -629,34 +637,113 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
     }, 300)
     return () => window.clearTimeout(handle)
   }, [query])
+  useEffect(() => {
+    if (!shown) {
+      setBox(null)
+      return
+    }
+    const place = () => {
+      const rect = rootRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const width = Math.min(224, window.innerWidth - 16)
+      const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8))
+      const top = Math.round(rect.bottom + 4)
+      setBox({ top, left: Math.round(left), width: Math.round(width), maxHeight: Math.max(160, window.innerHeight - top - 8) })
+    }
+    place()
+    window.addEventListener("resize", place)
+    return () => window.removeEventListener("resize", place)
+  }, [shown, query])
+  useEffect(() => {
+    if (!shown) return
+    const close = (event: MouseEvent) => {
+      const target = event.target as Node
+      if (!rootRef.current?.contains(target) && !listRef.current?.contains(target)) setOpen(false)
+    }
+    document.addEventListener("mousedown", close)
+    return () => document.removeEventListener("mousedown", close)
+  }, [shown])
+  const choose = (place: PlaceFindRow) => {
+    props.onOpen(place)
+    setQuery("")
+    setPlaces([])
+    setOpen(false)
+  }
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") {
+      setOpen(false)
+      return
+    }
+    if (!shown) return
+    if (event.key === "ArrowDown") {
+      event.preventDefault()
+      setActive((index) => (index + 1) % places.length)
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault()
+      setActive((index) => (index - 1 + places.length) % places.length)
+    } else if (event.key === "Enter") {
+      const place = places[active]
+      if (!place) return
+      event.preventDefault()
+      choose(place)
+    }
+  }
+  const listId = "place-find-list"
   return (
-    <div className="relative min-w-0">
+    <div ref={rootRef} className="relative min-w-0">
       <input
         value={query}
         placeholder={props.copy.placeFind}
         aria-label={props.copy.placeFind}
-        onChange={(event) => setQuery(event.target.value)}
-        className={`${BAR_CHIP} w-16 bg-transparent text-white placeholder:text-cyan-100/50`}
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded={shown}
+        aria-controls={listId}
+        aria-activedescendant={shown ? `${listId}-${active}` : undefined}
+        size={placeFieldUnits(query.trim() || props.copy.placeFind)}
+        onChange={(event) => {
+          setQuery(event.target.value)
+          setOpen(true)
+        }}
+        onFocus={() => setOpen(true)}
+        onKeyDown={onKeyDown}
+        className={`${BAR_CHIP} place-find bg-transparent text-white placeholder:text-cyan-100/50`}
       />
-      {places.length > 0 ? (
-        <ol className="absolute left-0 z-50 mt-1 max-h-64 w-56 overflow-y-auto border border-cyan-200/30 bg-[#041018] text-sm text-white">
-          {places.map((place) => (
-            <li key={`${place.layer}-${place.id}`}>
-              <button
-                type="button"
-                className="block w-full px-2 py-1.5 text-left"
-                onClick={() => {
-                  props.onOpen(place)
-                  setQuery("")
-                  setPlaces([])
-                }}
-              >
-                {displayText(locale, place.nameTc, place.nameEn)}
-              </button>
-            </li>
-          ))}
-        </ol>
-      ) : null}
+      {shown && box
+        ? createPortal(
+            <div
+              ref={listRef}
+              id={listId}
+              role="listbox"
+              aria-label={props.copy.placeFind}
+              className="fixed z-50 overflow-y-auto border border-cyan-200/30 bg-[#041018] text-sm text-white shadow-[0_0_24px_rgba(34,211,238,0.12)]"
+              style={{ top: box.top, left: box.left, width: box.width, maxHeight: box.maxHeight }}
+            >
+              {places.map((place, index) => {
+                const name = displayText(locale, place.nameTc, place.nameEn)
+                return (
+                  <button
+                    key={`${place.layer}-${place.id}`}
+                    id={`${listId}-${index}`}
+                    type="button"
+                    role="option"
+                    aria-selected={index === active}
+                    title={name}
+                    className={`block w-full truncate px-2 py-1.5 text-left ${index === active ? "bg-white/10" : ""} hover:bg-white/10`}
+                    onMouseDown={(event) => {
+                      event.preventDefault()
+                      choose(place)
+                    }}
+                    onMouseEnter={() => setActive(index)}
+                  >
+                    {name}
+                  </button>
+                )
+              })}
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   )
 }

@@ -243,6 +243,12 @@
   height: 0;
 }
 
+.place-find {
+  field-sizing: content;
+  width: auto;
+  max-width: 7.5rem;
+}
+
 .bar-scroll {
   scrollbar-width: none;
 }

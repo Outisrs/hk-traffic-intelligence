@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-place-suggest",
+    date: "2026-10-13",
+    at: "2026-10-13T01:20:00Z",
+    kind: "added",
+    en: "The place field stays as wide as its words, and matches appear under it while typing.",
+    tc: "地點欄只跟字一樣寬，輸入時相符的名稱列在下面。",
+    sc: "地点栏只跟字一样宽，输入时相符的名称列在下面。",
+  },
+  {
     id: "2026-10-13-near-sign",
     date: "2026-10-13",
     at: "2026-10-13T00:48:00Z",
