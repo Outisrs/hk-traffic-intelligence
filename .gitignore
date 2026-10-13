@@ -42,11 +42,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.cursor/*
-!.cursor/BUGBOT.md
-!.cursor/config/
-.cursor/config/*
-!.cursor/config/bugbot.yaml
+.cursor/
 AGENTS.md
 CLAUDE.md
 docs/superpowers/
