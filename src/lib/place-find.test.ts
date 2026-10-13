@@ -12,8 +12,15 @@ assert.deepEqual(found.map((place) => place.id), ["MOK", "MK515"])
 assert.equal(rankPlaces("旺", [station]).length, 0)
 assert.equal(rankPlaces("  ", [station]).length, 0)
 assert.equal(rankPlaces("mong", [station, street])[0]?.id, "MOK")
-assert.equal(rankPlaces("皇后像廣場", [pole, poleAgain, station]).length, 2)
+assert.equal(rankPlaces("皇后像廣場", [pole, poleAgain, station]).length, 1)
 assert.equal(rankPlaces("xxxx", [station, street, market]).length, 0)
+
+const coded = { layer: "kmb" as const, id: "MK515", nameTc: "旺角奶路臣街 (MK515)", nameEn: "Nelson (MK515)", coordinates: [114.17, 22.32] as [number, number] }
+const codedAgain = { layer: "kmb" as const, id: "MK174", nameTc: "旺角奶路臣街 (MK174)", nameEn: "Nelson (MK174)", coordinates: [114.2, 22.32] as [number, number] }
+const stop = { layer: "kmb" as const, id: "MK621", nameTc: "旺角站", nameEn: "Mong Kok Station", coordinates: [114.17, 22.319] as [number, number] }
+const named = rankPlaces("旺角", [coded, codedAgain, stop])
+assert.deepEqual(named.map((place) => place.nameTc), ["旺角站", "旺角奶路臣街"])
+assert.equal(rankPlaces("旺角", [coded, codedAgain], { lng: 114.2, lat: 22.32 })[0]?.id, "MK174")
 
 const many = Array.from({ length: 12 }, (_, index): PlaceFind => ({
   layer: "kmb",
@@ -22,6 +29,6 @@ const many = Array.from({ length: 12 }, (_, index): PlaceFind => ({
   nameEn: `Mong Kok ${index}`,
   coordinates: [114.17, 22.32],
 }))
-assert.equal(rankPlaces("旺角", many).length, 8)
+assert.equal(rankPlaces("旺角", many).length, 12)
 
 console.log("place find ok")

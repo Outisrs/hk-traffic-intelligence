@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-place-names",
+    date: "2026-10-13",
+    at: "2026-10-13T03:00:00Z",
+    kind: "improved",
+    en: "Search lists each place name, and names its layer.",
+    tc: "搜尋列出各個地名，並寫明圖層。",
+    sc: "搜索列出各个地名，并写明图层。",
+  },
+  {
     id: "2026-10-13-chip-line",
     date: "2026-10-13",
     at: "2026-10-13T02:50:00Z",

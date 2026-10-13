@@ -332,6 +332,7 @@ export function OpsHud(props: OpsHudProps) {
           <div className="flex items-stretch gap-1">
           <PlaceFind
             copy={m}
+            near={props.view}
             onOpen={(place) => props.onFocus({
               id: `find-${place.layer}-${place.id}`,
               coordinates: place.coordinates,
@@ -601,8 +602,8 @@ export function OpsHud(props: OpsHudProps) {
   )
 }
 
-function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => void }) {
-  const { locale } = useI18n()
+function PlaceFind(props: { copy: Messages; near: { lng: number; lat: number } | null; onOpen: (place: PlaceFindRow) => void }) {
+  const { locale, messages } = useI18n()
   const [query, setQuery] = useState("")
   const [places, setPlaces] = useState<PlaceFindRow[]>([])
   const [open, setOpen] = useState(false)
@@ -611,6 +612,8 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
   const rootRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const latest = useRef("")
+  const nearRef = useRef(props.near)
+  nearRef.current = props.near
   const shown = open && places.length > 0
   useEffect(() => {
     const needle = query.trim()
@@ -621,7 +624,13 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
     }
     const asked = needle
     const handle = window.setTimeout(() => {
-      void fetch(`/api/find?q=${encodeURIComponent(asked)}`)
+      const centre = nearRef.current
+      const params = new URLSearchParams({ q: asked })
+      if (centre) {
+        params.set("lng", centre.lng.toFixed(3))
+        params.set("lat", centre.lat.toFixed(3))
+      }
+      void fetch(`/api/find?${params}`)
         .then((response) => response.json())
         .then((body: { ok?: boolean; places?: PlaceFindRow[] }) => {
           if (latest.current !== asked) return
@@ -642,7 +651,7 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
     const place = () => {
       const rect = rootRef.current?.getBoundingClientRect()
       if (!rect) return
-      const width = Math.min(224, window.innerWidth - 16)
+      const width = Math.min(320, window.innerWidth - 16)
       const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8))
       const top = Math.round(rect.bottom + 4)
       setBox({ top, left: Math.round(left), width: Math.round(width), maxHeight: Math.max(160, window.innerHeight - top - 8) })
@@ -725,14 +734,15 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
                     role="option"
                     aria-selected={index === active}
                     title={name}
-                    className={`block w-full truncate px-2 py-1.5 text-left ${index === active ? "bg-white/10" : ""} hover:bg-white/10`}
+                    className={`flex w-full items-baseline gap-2 px-2 py-1.5 text-left ${index === active ? "bg-white/10" : ""} hover:bg-white/10`}
                     onMouseDown={(event) => {
                       event.preventDefault()
                       choose(place)
                     }}
                     onMouseEnter={() => setActive(index)}
                   >
-                    {name}
+                    <span className="min-w-0 flex-1 truncate">{name}</span>
+                    <span className="shrink-0 font-[family-name:var(--font-hud)] text-[0.62rem] tracking-[0.08em] text-cyan-100/70">{layerLabel(place.layer, messages)}</span>
                   </button>
                 )
               })}

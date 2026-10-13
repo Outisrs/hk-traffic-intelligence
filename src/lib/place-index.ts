@@ -8,12 +8,12 @@ import { kmbNamedStops } from "./kmb-network.ts"
 import { lrtNamedStations } from "./lrt-network.ts"
 import { mtrNamedStations } from "./mtr-network.ts"
 import { nlbNamedStops } from "./nlb-network.ts"
-import { rankPlaces, type PlaceFind } from "./place-find.ts"
+import { rankPlaces, type PlaceFind, type PlaceNear } from "./place-find.ts"
 
 let cached: PlaceFind[] | null = null
 
-export function findPlaces(query: string): PlaceFind[] {
-  return rankPlaces(query, catalogue())
+export function findPlaces(query: string, near?: PlaceNear | null): PlaceFind[] {
+  return rankPlaces(query, catalogue(), near)
 }
 
 function catalogue(): PlaceFind[] {
