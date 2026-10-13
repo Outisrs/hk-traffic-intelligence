@@ -243,11 +243,27 @@
   height: 0;
 }
 
+.bar-chip {
+  --bar-chip-pad-x: 0.5rem;
+  box-sizing: border-box;
+  margin: 0;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.25rem var(--bar-chip-pad-x);
+  font-family: var(--font-hud);
+  font-size: 0.65rem;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+}
+
 .place-find {
-  width: calc(4.6em + 1rem + 2px);
-  min-width: calc(4.6em + 1rem + 2px);
-  max-width: calc(4.6em + 1rem + 2px);
-  border: 1px solid color-mix(in oklab, var(--color-cyan-200) 85%, transparent);
+  width: calc(4.6em + (var(--bar-chip-pad-x) * 2) + 2px);
+  min-width: calc(4.6em + (var(--bar-chip-pad-x) * 2) + 2px);
+  max-width: calc(4.6em + (var(--bar-chip-pad-x) * 2) + 2px);
+  align-self: stretch;
+  border-color: color-mix(in oklab, var(--color-cyan-200) 85%, transparent);
+  background-color: rgb(0 0 0 / 0.3);
+  appearance: none;
 }
 
 .bar-scroll {

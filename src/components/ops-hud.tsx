@@ -70,8 +70,6 @@ const TONE: Record<HarbourJourney["colour"], string> = {
   none: "#C9D2DC",
 }
 
-const BAR_CHIP = "shrink-0 items-center gap-1.5 border px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em]"
-
 const BAR_KEY = {
   CH: "cross",
   EH: "eastern",
@@ -331,6 +329,7 @@ export function OpsHud(props: OpsHudProps) {
               {props.mapLive ? "" : ` · ${m.mapOff}`}
             </p>
           </div>
+          <div className="flex items-stretch gap-1">
           <PlaceFind
             copy={m}
             onOpen={(place) => props.onFocus({
@@ -340,12 +339,11 @@ export function OpsHud(props: OpsHudProps) {
               zoom: PLACE_FOCUS_ZOOM,
             })}
           />
-          <div className="flex items-stretch gap-1">
           <button
             type="button"
             aria-expanded={open && tab === "notes"}
             onClick={() => show("notes", undefined)}
-            className={`hidden sm:inline-flex ${BAR_CHIP} border-cyan-200/50 bg-cyan-300/10 text-cyan-50`}
+            className="bar-chip hidden shrink-0 items-center gap-1.5 border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:inline-flex"
           >
             <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
@@ -437,7 +435,7 @@ export function OpsHud(props: OpsHudProps) {
             type="button"
             aria-expanded={open && tab === "notes"}
             onClick={() => show("notes", undefined)}
-            className="inline-flex shrink-0 items-center gap-1.5 border border-cyan-200/50 bg-cyan-300/10 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 sm:hidden"
+            className="bar-chip inline-flex shrink-0 items-center gap-1.5 border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:hidden"
           >
             <UpdatesMark fresh={updatesFresh} label={m.changelog} />
           </button>
@@ -528,7 +526,7 @@ export function OpsHud(props: OpsHudProps) {
             aria-expanded={props.choice === true}
             aria-controls="harbour-intel-list"
             onClick={() => changeOpen(true)}
-            className="ml-1 inline-flex shrink-0 items-center gap-1 border border-white/15 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 uppercase"
+            className="bar-chip ml-1 inline-flex shrink-0 items-center gap-1 border-white/15 text-cyan-50 uppercase"
           >
             {m.intel}
             <FoldMark open={false} />
@@ -569,7 +567,7 @@ export function OpsHud(props: OpsHudProps) {
               aria-expanded={open}
               aria-controls="harbour-intel-list"
               onClick={() => changeOpen(false)}
-              className="ml-auto inline-flex shrink-0 items-center gap-1 border border-white/15 px-2 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] tracking-[0.12em] text-cyan-50 uppercase"
+              className="bar-chip ml-auto inline-flex shrink-0 items-center gap-1 border-white/15 text-cyan-50 uppercase"
             >
               {m.hide}
               <FoldMark open />
@@ -689,7 +687,7 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
   }
   const listId = "place-find-list"
   return (
-    <div ref={rootRef} className="relative min-w-0">
+    <div ref={rootRef} className="relative flex self-stretch">
       <input
         value={query}
         placeholder={props.copy.placeFind}
@@ -705,7 +703,7 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
         }}
         onFocus={() => setOpen(true)}
         onKeyDown={onKeyDown}
-        className={`${BAR_CHIP} place-find bg-black/30 text-white placeholder:text-cyan-100/80`}
+        className="bar-chip place-find text-white placeholder:text-cyan-100/80"
       />
       {shown && box
         ? createPortal(
@@ -807,7 +805,7 @@ function PlacesMenu(props: {
         aria-haspopup="dialog"
         aria-label={props.copy.places}
         onClick={() => setOpen((current) => !current)}
-        className={`flex h-full ${BAR_CHIP} ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
+        className={`bar-chip flex h-full shrink-0 items-center gap-1.5 ${open || props.places.length > 0 ? "border-[#e2b340]/70 text-[#e2b340]" : "border-white/15 text-cyan-50"}`}
       >
         <StarIcon filled={open || props.places.length > 0} className="size-[1em]" />
         {props.places.length > 0 ? <span className="tabular-nums">{props.places.length}</span> : null}

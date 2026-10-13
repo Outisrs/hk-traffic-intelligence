@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-chip-line",
+    date: "2026-10-13",
+    at: "2026-10-13T02:50:00Z",
+    kind: "fixed",
+    en: "The place field lines up with the chips beside it.",
+    tc: "地點欄和旁邊的按鈕同一條線。",
+    sc: "地点栏和旁边的按钮同一条线。",
+  },
+  {
     id: "2026-10-13-field-border",
     date: "2026-10-13",
     at: "2026-10-13T02:40:00Z",
