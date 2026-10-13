@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-both-cams",
+    date: "2026-10-13",
+    at: "2026-10-13T06:55:00Z",
+    kind: "fixed",
+    en: "Street cam and speed cam stay on the map together.",
+    tc: "街拍和快相可以同時留在地圖上。",
+    sc: "街拍和快相可以同时留在地图上。",
+  },
+  {
     id: "2026-10-13-street-cam",
     date: "2026-10-13",
     at: "2026-10-13T05:20:00Z",

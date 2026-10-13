@@ -1,9 +1,9 @@
 import type { Basemap, WatchLayer } from "@/lib/types"
 
 export const KMB_MIN_ZOOM = 13
-// One layer on its own can appear from the city view and show more pins than the mixed map.
+// One dense catalogue on its own can appear from the city view.
 export const SOLO_PIN_ZOOM = 10
-// Cameras and free-count pins wait until the harbour frame has been left behind.
+// Free-count pins wait until the harbour frame has been left behind.
 export const AVAILABILITY_MIN_ZOOM = 14
 // The satellite and street sweep ends at 13.05. The buildings sweep never goes below 15.2.
 export const FLYOVER_END_ZOOM = 13.05
@@ -14,7 +14,8 @@ export const PLACE_FOCUS_ZOOM = 16.5
 export const KMB_POLL_MS = 60_000
 export const PLACE_POLL_MS = 12 * 60 * 60 * 1000
 
-const AVAILABILITY_LAYERS = new Set<WatchLayer>(["cameras", "speedcam", "charger"])
+const AVAILABILITY_LAYERS = new Set<WatchLayer>(["charger"])
+const CITY_CAMERAS = new Set<WatchLayer>(["cameras", "speedcam"])
 const AFTER_SWEEP = new Set<WatchLayer>([
   "parking",
   "meter",
@@ -46,6 +47,7 @@ export function focusZoom(current: number, floor: number, requested?: number): n
 }
 
 export function placePinZoom(layer: WatchLayer, sole: WatchLayer | null, basemap: Basemap = "satellite"): number {
+  if (CITY_CAMERAS.has(layer)) return SOLO_PIN_ZOOM
   if (sole === layer) return SOLO_PIN_ZOOM
   const pastSweep = parkMeterZoom(basemap)
   if (AFTER_SWEEP.has(layer)) return pastSweep

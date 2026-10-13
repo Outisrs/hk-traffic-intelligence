@@ -45,7 +45,7 @@ import {
   workPopup,
 } from "@/components/map-cards"
 import { directedRouteMarks, stopPlate, stopPlateKey, type StopPlate } from "@/lib/stop-plate"
-import { AVAILABILITY_MIN_ZOOM, BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, SOLO_PIN_ZOOM, focusZoom, mapViewKey, placePinZoom } from "@/lib/kmb-view"
+import { BUILDINGS_FLYOVER_ZOOM, BUILDINGS_PARK_METER_ZOOM, FLYOVER_END_ZOOM, SOLO_PIN_ZOOM, focusZoom, mapViewKey, placePinZoom } from "@/lib/kmb-view"
 import { meterColorStops, meterInk, meterPin, meterPlateCount, type MeterPole } from "@/lib/meter-poles"
 import { chargersInsideParks, type ChargerPlace } from "@/lib/ev-chargers"
 import { carPinsWhenBoth, motorcyclePinsWhenBoth } from "@/lib/parking-parks"
@@ -1625,9 +1625,9 @@ function addWatchLayers(map: Map, before: string | undefined) {
     }, before)
   }
   if (map.hasImage("camera-cone")) {
-    addCameraLayer(map, "cameras-harbour", ["==", ["get", "harbour"], 1], AVAILABILITY_MIN_ZOOM, before)
-    addCameraLayer(map, "cameras-portal", ["all", ["==", ["get", "portal"], 1], ["!=", ["get", "harbour"], 1]], AVAILABILITY_MIN_ZOOM, before)
-    addCameraLayer(map, "cameras-city", ["all", ["!=", ["get", "harbour"], 1], ["!=", ["get", "portal"], 1]], AVAILABILITY_MIN_ZOOM, before)
+    addCameraLayer(map, "cameras-harbour", ["==", ["get", "harbour"], 1], placePinZoom("cameras", null), before)
+    addCameraLayer(map, "cameras-portal", ["all", ["==", ["get", "portal"], 1], ["!=", ["get", "harbour"], 1]], placePinZoom("cameras", null), before)
+    addCameraLayer(map, "cameras-city", ["all", ["!=", ["get", "harbour"], 1], ["!=", ["get", "portal"], 1]], placePinZoom("cameras", null), before)
   }
   const housing = speedCamMark()
   if (housing && !map.hasImage("speed-cam-mark")) {
@@ -1638,7 +1638,7 @@ function addWatchLayers(map: Map, before: string | undefined) {
       id: "speed-cams",
       type: "symbol",
       source: "speed-cams",
-      minzoom: AVAILABILITY_MIN_ZOOM,
+      minzoom: placePinZoom("speedcam", null),
       layout: {
         "icon-image": "speed-cam-mark",
         "icon-size": ["interpolate", ["linear"], ["zoom"], 11, 0.55, 14, 0.9, 16, 1.05],
