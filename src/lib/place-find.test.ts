@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { rankPlaces, type PlaceFind } from "./place-find.ts"
+import { placeNear, rankPlaces, type PlaceFind } from "./place-find.ts"
 
 const station: PlaceFind = { layer: "mtr", id: "MOK", nameTc: "旺角", nameEn: "Mong Kok", coordinates: [114.17, 22.32] }
 const street: PlaceFind = { layer: "kmb", id: "MK515", nameTc: "旺角奶路臣街", nameEn: "Nelson Street Mong Kok", coordinates: [114.17, 22.32] }
@@ -30,5 +30,11 @@ const many = Array.from({ length: 12 }, (_, index): PlaceFind => ({
   coordinates: [114.17, 22.32],
 }))
 assert.equal(rankPlaces("旺角", many).length, 12)
+assert.equal(placeNear(null, null), null)
+assert.equal(placeNear("", "22.32"), null)
+assert.equal(placeNear("114.17", null), null)
+assert.equal(placeNear("nope", "22.32"), null)
+assert.deepEqual(placeNear("114.17", "22.32"), { lng: 114.17, lat: 22.32 })
+assert.deepEqual(placeNear("0", "0"), { lng: 0, lat: 0 })
 
 console.log("place find ok")

@@ -12,6 +12,14 @@ export type PlaceFind = {
 
 export type PlaceNear = { lng: number; lat: number }
 
+export function placeNear(lng: string | null, lat: string | null): PlaceNear | null {
+  if (lng == null || lat == null || lng.trim() === "" || lat.trim() === "") return null
+  const parsedLng = Number(lng)
+  const parsedLat = Number(lat)
+  if (!Number.isFinite(parsedLng) || !Number.isFinite(parsedLat)) return null
+  return { lng: parsedLng, lat: parsedLat }
+}
+
 const EARLY = new Set<PlaceFindLayer>(["mtr", "lrt", "ferry", "control"])
 const LIMIT = 40
 const POLE_CODE = /\s*\([A-Za-z]{1,4}\d{2,4}[A-Za-z]?\)\s*$/u
