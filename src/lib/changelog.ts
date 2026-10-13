@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-field-language",
+    date: "2026-10-13",
+    at: "2026-10-13T02:15:00Z",
+    kind: "improved",
+    en: "The place field is four characters wide and easier to see. Language sits on the right.",
+    tc: "地點欄寬四個字，也看得清楚一點。語言選擇放在右邊。",
+    sc: "地点栏宽四个字，也看得清楚一点。语言选择放在右边。",
+  },
+  {
     id: "2026-10-13-place-suggest",
     date: "2026-10-13",
     at: "2026-10-13T01:20:00Z",

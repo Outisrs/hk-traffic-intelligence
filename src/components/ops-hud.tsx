@@ -27,7 +27,6 @@ import { firstOpenBoundary, INTEL_TABS, intelBoard, type IntelItem, type IntelTa
 import { INTEL_PHONE_QUERY, preferenceServerSnapshot, preferenceSnapshot, subscribePreferences, updatePreference } from "@/lib/preferences"
 import { formatSpeed } from "@/lib/speed"
 import { PLACE_FOCUS_ZOOM } from "@/lib/kmb-view"
-import { placeFieldUnits } from "@/lib/place-find"
 import type { ApproachPoint, ApproachesResponse, HarbourJourney, TrafficResponse, WatchLayer, WeatherConditions, WeatherWarning } from "@/lib/types"
 import { weatherBar } from "@/lib/warnings"
 
@@ -332,21 +331,6 @@ export function OpsHud(props: OpsHudProps) {
               {props.mapLive ? "" : ` · ${m.mapOff}`}
             </p>
           </div>
-          <div className="hidden shrink-0 border border-white/15 sm:inline-flex" role="group" aria-label={m.language}>
-            {LOCALES.map((item) => (
-              <button
-                key={item}
-                type="button"
-                aria-pressed={locale === item}
-                onClick={() => setLocale(item)}
-                className={`px-1.5 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] ${
-                  locale === item ? "bg-white/10 text-white" : "text-cyan-100/70"
-                }`}
-              >
-                {LOCALE_MARK[item]}
-              </button>
-            ))}
-          </div>
           <PlaceFind
             copy={m}
             onOpen={(place) => props.onFocus({
@@ -449,21 +433,6 @@ export function OpsHud(props: OpsHudProps) {
               onClick={() => show("weather", undefined)}
             />
           ) : null}
-          <div className="inline-flex shrink-0 border border-white/15 sm:hidden" role="group" aria-label={m.language}>
-            {LOCALES.map((item) => (
-              <button
-                key={`bar-${item}`}
-                type="button"
-                aria-pressed={locale === item}
-                onClick={() => setLocale(item)}
-                className={`px-1.5 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] ${
-                  locale === item ? "bg-white/10 text-white" : "text-cyan-100/70"
-                }`}
-              >
-                {LOCALE_MARK[item]}
-              </button>
-            ))}
-          </div>
           <button
             type="button"
             aria-expanded={open && tab === "notes"}
@@ -493,6 +462,21 @@ export function OpsHud(props: OpsHudProps) {
               ) : null}
             </div>
           </button>
+          <div className="inline-flex shrink-0 border border-white/15" role="group" aria-label={m.language}>
+            {LOCALES.map((item) => (
+              <button
+                key={item}
+                type="button"
+                aria-pressed={locale === item}
+                onClick={() => setLocale(item)}
+                className={`px-1.5 py-1 font-[family-name:var(--font-hud)] text-[0.65rem] ${
+                  locale === item ? "bg-white/10 text-white" : "text-cyan-100/70"
+                }`}
+              >
+                {LOCALE_MARK[item]}
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             aria-expanded={barOpen}
@@ -700,14 +684,13 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
         aria-expanded={shown}
         aria-controls={listId}
         aria-activedescendant={shown ? `${listId}-${active}` : undefined}
-        size={placeFieldUnits(query.trim() || props.copy.placeFind)}
         onChange={(event) => {
           setQuery(event.target.value)
           setOpen(true)
         }}
         onFocus={() => setOpen(true)}
         onKeyDown={onKeyDown}
-        className={`${BAR_CHIP} place-find bg-transparent text-white placeholder:text-cyan-100/50`}
+        className={`${BAR_CHIP} place-find border-white/10 bg-black/30 text-white placeholder:text-cyan-100/80`}
       />
       {shown && box
         ? createPortal(

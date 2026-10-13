@@ -244,9 +244,9 @@
 }
 
 .place-find {
-  field-sizing: content;
-  width: auto;
-  max-width: 7.5rem;
+  width: calc(4.36em + 1rem + 2px);
+  min-width: calc(4.36em + 1rem + 2px);
+  max-width: calc(4.36em + 1rem + 2px);
 }
 
 .bar-scroll {

@@ -10,18 +10,6 @@ export type PlaceFind = {
 
 const EARLY = new Set<PlaceFindLayer>(["mtr", "lrt", "ferry", "control"])
 const LIMIT = 8
-const FIELD_CAP = 14
-
-export function placeFieldUnits(text: string): number {
-  let units = 0
-  for (const char of text) {
-    const code = char.codePointAt(0) ?? 0
-    units += code > 0xff ? 2 : 1
-  }
-  if (units < 2) return 2
-  if (units > FIELD_CAP) return FIELD_CAP
-  return units
-}
 
 export function rankPlaces(query: string, places: readonly PlaceFind[]): PlaceFind[] {
   const needle = query.trim()
