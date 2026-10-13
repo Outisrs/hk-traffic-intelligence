@@ -24,7 +24,7 @@
 
 ## 儀表板上可以看到什麼
 
-過海和在市內開車方面，儀表板先顯示最基本的資料。紅磡海底隧道、東區海底隧道和西區海底隧道，顯示同一個路口量度的行車時間，預設是地圖上最近的路口。也可以另選起點，讓三條隧道從同一處比較。策略性道路沿用運輸署的暢順、緩慢和擠塞等級，已公布車速的路段會顯示該車速。公共快拍可以直接打開，包括隧道口。主要道路的工程、過海隧道和大欖隧道的收費點，以及仍然生效的特別交通消息，都在同一個畫面。
+過海和在市內開車方面，儀表板先顯示最基本的資料。紅磡海底隧道、東區海底隧道和西區海底隧道，顯示同一個路口量度的行車時間，預設是地圖上最近的路口。也可以另選起點，讓三條隧道從同一處比較。策略性道路沿用運輸署的暢順、緩慢和擠塞等級，已公布車速的路段會顯示該車速。街頭相機可以直接打開，包括隧道口。主要道路的工程、過海隧道和大欖隧道的收費點，以及仍然生效的特別交通消息，都在同一個畫面。
 
 過關和看天氣方面，下一組資料隨後出現。八個陸路管制站顯示旅客大堂，分居民與訪客、入境與出境，並一併顯示通往該口岸的策略性道路車速。羅湖供旅客過關，不設私家車通道，所以已公布的數字不包括私家車輪候。生效中的天文台警告會全部列出。天色平靜時，網站仍會報出天文台氣溫，以及過去一小時有沒有下雨。
 
@@ -70,7 +70,7 @@ npm run dev
 | 策略性道路的車速和官方等級 | [策略性道路及主要道路交通數據](https://data.gov.hk/tc-data/dataset/hk-td-sm_4-traffic-data-strategic-major-roads)，等級見 [HKeMobility](https://www.hkemobility.gov.hk/tc/) |
 | 這些道路的形狀 | [道路網絡（第二代）](https://data.gov.hk/tc-data/dataset/hk-td-tis_15-road-network-v2) |
 | 過海隧道的行車時間 | [HKeMobility](https://www.hkemobility.gov.hk/tc/) 的行車時間 |
-| 英文和繁體中文的快拍 | [HKeMobility](https://www.hkemobility.gov.hk/tc/) 的快拍 |
+| 英文和繁體中文的街頭相機 | [HKeMobility](https://www.hkemobility.gov.hk/tc/) 的街頭相機 |
 | 道路工程 | [HKeMobility](https://www.hkemobility.gov.hk/tc/) 的道路工程 |
 | 收費點 | [HKeMobility](https://www.hkemobility.gov.hk/tc/) 的收費點 |
 | 特別交通消息 | [特別交通消息](https://data.gov.hk/tc-data/dataset/hk-td-tis_19-special-traffic-news-v2) |

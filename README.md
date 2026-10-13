@@ -26,7 +26,7 @@ It does not plan driving routes. It reads the figures that public bodies already
 
 ## What the dashboard shows
 
-For crossing the harbour and driving in town, the dashboard starts with the essentials. The Cross-Harbour Tunnel, the Eastern Harbour Crossing, and the Western Harbour Crossing show journey times from the same roadside sign, the one nearest the map. Another sign can be chosen, so the three tunnels are compared from one starting point. Strategic roads use the Transport Department grades of Good, Average, and Bad, and show a live speed wherever one has been published. You can open the public cameras, including the tunnel mouths. Road works on the major routes, toll points at the harbour crossings and Tai Lam Tunnel, and special traffic notices that are still in force are all on the same view.
+For crossing the harbour and driving in town, the dashboard starts with the essentials. The Cross-Harbour Tunnel, the Eastern Harbour Crossing, and the Western Harbour Crossing show journey times from the same roadside sign, the one nearest the map. Another sign can be chosen, so the three tunnels are compared from one starting point. Strategic roads use the Transport Department grades of Good, Average, and Bad, and show a live speed wherever one has been published. You can open the street cams, including the tunnel mouths. Road works on the major routes, toll points at the harbour crossings and Tai Lam Tunnel, and special traffic notices that are still in force are all on the same view.
 
 For going through the boundary and checking the weather, the next group follows. The eight land control points show the passenger halls for residents and visitors, arriving and departing, together with the live speed on the strategic road that leads to each port. Lo Wu serves passengers rather than private cars, so its published figures include no private car queue. Every Observatory warning in force is listed. On a quiet day the site still reports the Observatory temperature and whether rain fell in the past hour.
 
@@ -72,7 +72,7 @@ Each row is one part of the dashboard and the publication it is drawn from. This
 | Speed and official grade on strategic roads | [Traffic data of strategic and major roads](https://data.gov.hk/en-data/dataset/hk-td-sm_4-traffic-data-strategic-major-roads), with grades as shown on [HKeMobility](https://www.hkemobility.gov.hk/en/) |
 | The shape of those roads | [Road Network, second generation](https://data.gov.hk/en-data/dataset/hk-td-tis_15-road-network-v2) |
 | Journey times at the harbour crossings | Journey-time information on [HKeMobility](https://www.hkemobility.gov.hk/en/) |
-| Cameras, in English and Traditional Chinese | Camera images on [HKeMobility](https://www.hkemobility.gov.hk/en/) |
+| Street cams, in English and Traditional Chinese | Street cam images on [HKeMobility](https://www.hkemobility.gov.hk/en/) |
 | Road works | Road works on [HKeMobility](https://www.hkemobility.gov.hk/en/) |
 | Toll points | Toll points on [HKeMobility](https://www.hkemobility.gov.hk/en/) |
 | Special traffic news | [Special traffic news](https://data.gov.hk/en-data/dataset/hk-td-tis_19-special-traffic-news-v2) |
