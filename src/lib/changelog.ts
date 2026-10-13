@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-place-pair",
+    date: "2026-10-13",
+    at: "2026-10-13T03:20:00Z",
+    kind: "fixed",
+    en: "The place field sits with the star. Updates sits on the other side.",
+    tc: "找地點和星星放在一起。更新放在另一邊。",
+    sc: "找地点和星星放在一起。更新放在另一边。",
+  },
+  {
     id: "2026-10-13-place-names",
     date: "2026-10-13",
     at: "2026-10-13T03:00:00Z",

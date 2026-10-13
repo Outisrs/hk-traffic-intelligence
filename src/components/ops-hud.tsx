@@ -329,6 +329,14 @@ export function OpsHud(props: OpsHudProps) {
               {props.mapLive ? "" : ` · ${m.mapOff}`}
             </p>
           </div>
+          <button
+            type="button"
+            aria-expanded={open && tab === "notes"}
+            onClick={() => show("notes", undefined)}
+            className="bar-chip hidden border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:inline-flex"
+          >
+            <UpdatesMark fresh={updatesFresh} label={m.changelog} />
+          </button>
           <div className="flex items-stretch gap-1">
           <PlaceFind
             copy={m}
@@ -340,14 +348,6 @@ export function OpsHud(props: OpsHudProps) {
               zoom: PLACE_FOCUS_ZOOM,
             })}
           />
-          <button
-            type="button"
-            aria-expanded={open && tab === "notes"}
-            onClick={() => show("notes", undefined)}
-            className="bar-chip hidden border-cyan-200/50 bg-cyan-300/10 text-cyan-50 sm:inline-flex"
-          >
-            <UpdatesMark fresh={updatesFresh} label={m.changelog} />
-          </button>
           <PlacesMenu
             places={places}
             copy={m}
