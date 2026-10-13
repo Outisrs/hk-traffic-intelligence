@@ -1,1 +1,35 @@
-aW1wb3J0IHsgYmluZGluZ3MsIGRlZmluZUNvbmZpZywgZGVmaW5lV29ya2VyIH0gZnJvbSAiY2YvY29uZmlnIjsKCmV4cG9ydCBkZWZhdWx0IGRlZmluZUNvbmZpZyh7CiAgd29ya2VyOiBkZWZpbmVXb3JrZXIoewogICAgbmFtZTogImhrdHJhZmZpYyIsCiAgICBlbnRyeXBvaW50OiAidmluZXh0L3NlcnZlci9mZXRjaC1oYW5kbGVyIiwKICAgIGNvbXBhdGliaWxpdHlEYXRlOiAiMjAyNi0wOS0yOSIsCiAgICBwbGFjZW1lbnQ6IHsgbW9kZTogInNtYXJ0IiB9LAogICAgY29tcGF0aWJpbGl0eUZsYWdzOiBbIm5vZGVqc19jb21wYXQiXSwKICAgIGFzc2V0czogeyBub3RGb3VuZEhhbmRsaW5nOiAibm9uZSIgfSwKICAgIG9ic2VydmFiaWxpdHk6IHsKICAgICAgZW5hYmxlZDogZmFsc2UsCiAgICAgIGhlYWRTYW1wbGluZ1JhdGU6IDEsCiAgICAgIHJlZGFjdFF1ZXJ5U3RyaW5nOiBmYWxzZSwKICAgICAgaXNzdWVzOiB7CiAgICAgICAgZW5hYmxlZDogZmFsc2UsCiAgICAgIH0sCiAgICAgIGxvZ3M6IHsKICAgICAgICBlbmFibGVkOiB0cnVlLAogICAgICAgIGhlYWRTYW1wbGluZ1JhdGU6IDEsCiAgICAgICAgaW52b2NhdGlvbkxvZ3M6IHRydWUsCiAgICAgICAgcGVyc2lzdDogdHJ1ZSwKICAgICAgfSwKICAgICAgdHJhY2VzOiB7CiAgICAgICAgZW5hYmxlZDogdHJ1ZSwKICAgICAgICBoZWFkU2FtcGxpbmdSYXRlOiAxLAogICAgICAgIHBlcnNpc3Q6IHRydWUsCiAgICAgIH0sCiAgICB9LAogICAgZW52OiB7CiAgICAgIEFTU0VUUzogYmluZGluZ3MuYXNzZXRzKCksCiAgICAgIFZJU0lUX0NPVU5UUzogYmluZGluZ3Mua3Yoe2lkOiAiZWEyYmY0OGVhNjYzNDdjMGI4MGRiOGQ5MmJiOWE0YTUiIH0pLAogICAgfSwKICB9KSwKfSk7Cg==
+import { bindings, defineConfig, defineWorker } from "cf/config";
+
+export default defineConfig({
+  worker: defineWorker({
+    name: "hktraffic",
+    entrypoint: "vinext/server/fetch-handler",
+    compatibilityDate: "2026-09-29",
+    placement: { mode: "smart" },
+    compatibilityFlags: ["nodejs_compat"],
+    assets: { notFoundHandling: "none" },
+    observability: {
+      enabled: false,
+      headSamplingRate: 1,
+      redactQueryString: false,
+      logs: {
+        enabled: true,
+        headSamplingRate: 1,
+        invocationLogs: true,
+        persist: true,
+      },
+      traces: {
+        enabled: true,
+        headSamplingRate: 1,
+        persist: true,
+      },
+      issues: {
+        enabled: false,
+      },
+    },
+    env: {
+      ASSETS: bindings.assets(),
+      VISIT_COUNTS: bindings.kv({ id: "ea2bf48ea66347c0b80db8d92bb9a4a5" }),
+    },
+  }),
+});
