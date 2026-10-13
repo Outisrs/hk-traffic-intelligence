@@ -247,6 +247,7 @@
   width: calc(4.6em + 1rem + 2px);
   min-width: calc(4.6em + 1rem + 2px);
   max-width: calc(4.6em + 1rem + 2px);
+  border: 1px solid color-mix(in oklab, var(--color-cyan-200) 85%, transparent);
 }
 
 .bar-scroll {

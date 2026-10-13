@@ -14,6 +14,15 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: "2026-10-13-field-border",
+    date: "2026-10-13",
+    at: "2026-10-13T02:40:00Z",
+    kind: "fixed",
+    en: "The place field has a visible border.",
+    tc: "地點欄有一圈看得見的邊。",
+    sc: "地点栏有一圈看得见的边。",
+  },
+  {
     id: "2026-10-13-field-language",
     date: "2026-10-13",
     at: "2026-10-13T02:15:00Z",

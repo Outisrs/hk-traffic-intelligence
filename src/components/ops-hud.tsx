@@ -705,7 +705,7 @@ function PlaceFind(props: { copy: Messages; onOpen: (place: PlaceFindRow) => voi
         }}
         onFocus={() => setOpen(true)}
         onKeyDown={onKeyDown}
-        className={`${BAR_CHIP} place-find border-white/10 bg-black/30 text-white placeholder:text-cyan-100/80`}
+        className={`${BAR_CHIP} place-find bg-black/30 text-white placeholder:text-cyan-100/80`}
       />
       {shown && box
         ? createPortal(
