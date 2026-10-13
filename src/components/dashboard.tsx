@@ -16,6 +16,7 @@ import type { ChargerPlacesResponse } from "@/lib/ev-chargers"
 import { CHARGER_POLL_MS } from "@/lib/epd-chargers"
 import { inLantau } from "@/lib/lantau"
 import { PICTURE_POLL_MS } from "@/lib/picture"
+import { SPEED_CAM_POLL_MS, type SpeedCamResponse } from "@/lib/speed-cam"
 import { boardFaultSnapshot, subscribeBoardFaults } from "@/lib/board-status"
 import { catalogueBoards } from "@/lib/place-arrivals"
 import { layersForIntel } from "@/lib/intel-focus"
@@ -61,6 +62,7 @@ export function Dashboard() {
   const trafficLive = useLiveJson<TrafficResponse>(forceDown ? "/api/traffic?simulate=fail" : "/api/traffic")
   const approachesLive = useLiveJson<ApproachesResponse>("/api/approaches")
   const pictureLive = useLiveJson<PictureResponse>("/api/picture", PICTURE_POLL_MS)
+  const speedCamLive = useLiveJson<SpeedCamResponse>("/api/speed-cam", SPEED_CAM_POLL_MS)
   const incidentsLive = useLiveJson<IncidentsResponse>("/api/incidents")
   const controlLive = useLiveJson<ControlPointsResponse>("/api/control-points")
   const warningsLive = useLiveJson<WarningsResponse>(`/api/warnings?lang=${hkoLang(locale)}`)
@@ -178,6 +180,7 @@ export function Dashboard() {
         corridors={corridors}
         approaches={approaches?.ok ? approaches.points : []}
         picture={picture}
+        speedCams={speedCamLive.data?.ok ? speedCamLive.data.cameras : null}
         incidents={incidents?.ok ? incidents.incidents : null}
         controlPoints={boundary}
         mtr={mtr?.ok ? mtr : null}
@@ -266,6 +269,7 @@ export function Dashboard() {
         counts={{
           speed: null,
           cameras: null,
+          speedcam: speedCamLive.data?.ok ? speedCamLive.data.cameras.features.length : null,
           works: picture ? picture.works.features.length : null,
           tolls: null,
           incidents: incidents ? incidents.incidents.features.length : null,
@@ -289,6 +293,7 @@ export function Dashboard() {
         onReplay={() => setFlyToken((value) => value + 1)}
         mapLive={mapLive}
         pictureError={pictureError}
+        speedCamError={speedCamLive.error ?? (speedCamLive.data && !speedCamLive.data.ok ? speedCamLive.data.error ?? "Speed cams did not load." : null)}
         mtrError={mtrLive.error ?? (mtr && !mtr.ok ? mtr.error ?? "Next train feed failed" : null)}
         kmbError={liveError(kmbPlacesLive.error, kmbPlacesLive.data, "KMB stops failed")}
         lrtError={lrtLive.error ?? (lrt && !lrt.ok ? lrt.error ?? "Light Rail arrivals failed" : null)}

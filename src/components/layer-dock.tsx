@@ -18,6 +18,7 @@ type LayerDockProps = {
   onReplay: () => void
   mapLive: boolean
   pictureError: string | null
+  speedCamError: string | null
   mtrError: string | null
   kmbError: string | null
   lrtError: string | null
@@ -46,6 +47,8 @@ export function layerLabel(id: WatchLayer, m: Messages): string {
       return m.speedLayer
     case "cameras":
       return m.cameras
+    case "speedcam":
+      return m.speedCam
     case "works":
       return m.worksLayer
     case "tolls":
@@ -119,6 +122,7 @@ const COUNTED_LAYERS: ReadonlySet<WatchLayer> = new Set(["works", "incidents"])
 const LAYERS: { id: WatchLayer; swatch: string }[] = [
   { id: "speed", swatch: "bg-[#3DDC97]" },
   { id: "cameras", swatch: "bg-[#7DD3E8]" },
+  { id: "speedcam", swatch: "bg-[#FB923C]" },
   { id: "works", swatch: "bg-[#FF5D73]" },
   { id: "tolls", swatch: "bg-[#E7FBFF]" },
   { id: "incidents", swatch: "bg-[#FF5D73]" },
@@ -289,6 +293,11 @@ export function LayerDock(props: LayerDockProps) {
       {props.pictureError ? (
         <p className="basis-full text-xs text-red-100" role="alert">
           {m.locale === "en" ? props.pictureError : m.pictureFailed}
+        </p>
+      ) : null}
+      {props.speedCamError ? (
+        <p className="basis-full text-xs text-red-100" role="alert">
+          {m.locale === "en" ? props.speedCamError : m.speedCamFailed}
         </p>
       ) : null}
       {props.mtrError ? (

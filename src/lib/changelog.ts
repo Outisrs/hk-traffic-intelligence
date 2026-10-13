@@ -18,9 +18,9 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     date: "2026-10-13",
     at: "2026-10-13T05:20:00Z",
     kind: "improved",
-    en: "A camera on the street is labelled Street cam.",
-    tc: "街上的相機寫成街頭相機。",
-    sc: "街上的相机写成街头相机。",
+    en: "A camera on the street is labelled Street cam. A speed camera housing is labelled Speed cam.",
+    tc: "街上的相機稱為街拍。測速相機箱稱為快相。",
+    sc: "街上的相机称为街拍。测速相机箱称为快相。",
   },
   {
     id: "2026-10-13-place-pair",

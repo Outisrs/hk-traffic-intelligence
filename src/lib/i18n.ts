@@ -151,6 +151,8 @@ export type Messages = {
   buildings: string
   speedLayer: string
   cameras: string
+  speedCam: string
+  speedCamFailed: string
   worksLayer: string
   tolls: string
   incidentsLayer: string
@@ -389,6 +391,8 @@ const en: Messages = {
   buildings: "Buildings",
   speedLayer: "Speed",
   cameras: "Street cam",
+  speedCam: "Speed cam",
+  speedCamFailed: "Speed cams did not load.",
   worksLayer: "Works",
   tolls: "Tolls",
   incidentsLayer: "Incidents",
@@ -626,7 +630,9 @@ const zhHK: Messages = {
   streets: "街道",
   buildings: "樓宇",
   speedLayer: "車速",
-  cameras: "街頭相機",
+  cameras: "街拍",
+  speedCam: "快相",
+  speedCamFailed: "未能載入快相。",
   worksLayer: "工程",
   tolls: "隧道",
   incidentsLayer: "事故",
@@ -638,9 +644,9 @@ const zhHK: Messages = {
   layerHide: "收起",
   basemap: "底圖",
   speedKey: "運輸署交通狀況等級：暢順、緩慢、擠塞。",
-  pictureFailed: "未能載入街頭相機及工程。",
+  pictureFailed: "未能載入街拍及工程。",
   mapFailed: "衛星地圖未能啟動。過海時間與路網車速仍會顯示。",
-  snapshotFailed: "街頭相機未能載入。",
+  snapshotFailed: "街拍未能載入。",
   near: (place) => `近${place}`,
   facing: (direction) => `朝${direction}`,
   facingLabel: "鏡頭",
@@ -860,7 +866,9 @@ const zhCN: Messages = {
   streets: "街道",
   buildings: "楼宇",
   speedLayer: "车速",
-  cameras: "街头相机",
+  cameras: "街拍",
+  speedCam: "快相",
+  speedCamFailed: "未能载入快相。",
   worksLayer: "工程",
   tolls: "隧道",
   incidentsLayer: "事故",
@@ -872,9 +880,9 @@ const zhCN: Messages = {
   layerHide: "收起",
   basemap: "底图",
   speedKey: "运输署交通状况等级：畅顺、缓慢、挤塞。",
-  pictureFailed: "未能载入街头相机及工程。",
+  pictureFailed: "未能载入街拍及工程。",
   mapFailed: "卫星地图未能启动。过海时间与路网车速仍会显示。",
-  snapshotFailed: "街头相机未能载入。",
+  snapshotFailed: "街拍未能载入。",
   near: (place) => `近${place}`,
   facing: (direction) => `朝${direction}`,
   facingLabel: "镜头",

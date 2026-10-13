@@ -6,6 +6,7 @@ const KEY = "hk-traffic-preferences"
 const LAYER_IDS: readonly WatchLayer[] = [
   "speed",
   "cameras",
+  "speedcam",
   "works",
   "tolls",
   "incidents",
@@ -46,6 +47,7 @@ export const PREFERENCE_DEFAULTS: Preferences = {
   layers: {
     speed: true,
     cameras: true,
+    speedcam: true,
     works: true,
     tolls: true,
     incidents: true,

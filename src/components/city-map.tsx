@@ -37,6 +37,7 @@ import {
   lrtTrainPopup,
   corridorPopup,
   incidentPopup,
+  speedCamPopup,
   readablePlace,
   stationPopup,
   tollPopup,
@@ -194,7 +195,7 @@ const FLYOVER = [
   { center: [114.178, 22.292] as [number, number], zoom: FLYOVER_END_ZOOM, pitch: 52, bearing: -12, duration: 7200, curve: 1.2 },
 ]
 
-const WATCH_HITS = ["approach-times", "incidents", "cameras-harbour", "cameras-portal", "cameras-city", "works", "tolls-portal", "tolls-overview", "control-points", "mtr-stations", "mtr-station-label", "mtr-trains", "mtr-train-label", "kmb-stops", "kmb-stop-label", "lrt-stations", "lrt-station-label", "lrt-trains", "lrt-train-label", "citybus-stops", "citybus-stop-label", "gmb-stops", "gmb-stop-label", "nlb-stops", "nlb-stop-label", "mtrbus-stops", "mtrbus-stop-label", "ferry-piers", "ferry-pier-label", "ferry-vessels", "ferry-vessel-label", "parking", "parking-label", "motorcycle", "motorcycle-label", "kerb", "kerb-label", "meters", "meters-label", "chargers", "chargers-label"]
+const WATCH_HITS = ["approach-times", "incidents", "cameras-harbour", "cameras-portal", "cameras-city", "speed-cams", "works", "tolls-portal", "tolls-overview", "control-points", "mtr-stations", "mtr-station-label", "mtr-trains", "mtr-train-label", "kmb-stops", "kmb-stop-label", "lrt-stations", "lrt-station-label", "lrt-trains", "lrt-train-label", "citybus-stops", "citybus-stop-label", "gmb-stops", "gmb-stop-label", "nlb-stops", "nlb-stop-label", "mtrbus-stops", "mtrbus-stop-label", "ferry-piers", "ferry-pier-label", "ferry-vessels", "ferry-vessel-label", "parking", "parking-label", "motorcycle", "motorcycle-label", "kerb", "kerb-label", "meters", "meters-label", "chargers", "chargers-label"]
 
 type AnimLine = {
   coords: [number, number][]
@@ -209,6 +210,7 @@ type CityMapProps = {
   corridors: Corridor[]
   approaches: ApproachPoint[]
   picture: PictureResponse | null
+  speedCams: GeoJSON.FeatureCollection | null
   incidents: GeoJSON.FeatureCollection | null
   controlPoints: GeoJSON.FeatureCollection | null
   mtr: MtrResponse | null
@@ -244,6 +246,7 @@ export function CityMap({
   corridors,
   approaches,
   picture,
+  speedCams,
   incidents,
   controlPoints,
   mtr,
@@ -663,6 +666,7 @@ export function CityMap({
       const labels = zoom >= LABEL_MIN_ZOOM
       const counts = zoom >= COUNT_MIN_ZOOM
       geoJsonSource(map, "cameras")?.setData(picture?.cameras ?? emptyCollection())
+      geoJsonSource(map, "speed-cams")?.setData(speedCams ?? emptyCollection())
       geoJsonSource(map, "works")?.setData(picture?.works ?? emptyCollection())
       geoJsonSource(map, "tolls")?.setData(picture?.tolls ?? emptyCollection())
       geoJsonSource(map, "incidents")?.setData(incidents ?? emptyCollection())
@@ -744,7 +748,7 @@ export function CityMap({
     return () => {
       map.off("zoomend", paint)
     }
-  }, [chargers, citybus, controlPoints, disabled, ferry, gmb, incidents, kmb, kerbs, layers.charger, layers.citybus, layers.ferry, layers.gmb, layers.kerb, layers.kmb, layers.lrt, layers.meter, layers.motorcycle, layers.mtrbus, layers.nlb, layers.parking, locale, lrt, mapReady, meters, motorcycles, mtr, mtrBus, nlb, parking, picture, styleEpoch])
+  }, [chargers, citybus, controlPoints, disabled, ferry, gmb, incidents, kmb, kerbs, layers.charger, layers.citybus, layers.ferry, layers.gmb, layers.kerb, layers.kmb, layers.lrt, layers.meter, layers.motorcycle, layers.mtrbus, layers.nlb, layers.parking, locale, lrt, mapReady, meters, motorcycles, mtr, mtrBus, nlb, parking, picture, speedCams, styleEpoch])
 
   useEffect(() => {
     const map = mapRef.current
@@ -766,7 +770,7 @@ export function CityMap({
   useEffect(() => {
     const map = mapRef.current
     if (disabled || !map || !mapReady) return
-    const kinds: WatchLayer[] = ["speed", "cameras", "works", "tolls", "incidents", "control", "mtr", "kmb", "lrt", "citybus", "gmb", "nlb", "mtrbus", "ferry", "parking", "motorcycle", "kerb", "meter", "charger"]
+    const kinds: WatchLayer[] = ["speed", "cameras", "speedcam", "works", "tolls", "incidents", "control", "mtr", "kmb", "lrt", "citybus", "gmb", "nlb", "mtrbus", "ferry", "parking", "motorcycle", "kerb", "meter", "charger"]
     const sole = soleLayer(layers)
     const pinZoom: Partial<Record<string, number>> = {
       "kmb-stops": placePinZoom("kmb", sole, basemap),
@@ -786,6 +790,7 @@ export function CityMap({
       "cameras-harbour": placePinZoom("cameras", sole, basemap),
       "cameras-portal": placePinZoom("cameras", sole, basemap),
       "cameras-city": placePinZoom("cameras", sole, basemap),
+      "speed-cams": placePinZoom("speedcam", sole, basemap),
     }
     for (const kind of kinds) {
       for (const layerId of layerIds(kind)) {
@@ -1321,6 +1326,7 @@ function addStopLabel(map: Map, id: string, source: string, before: string | und
 
 function mountDataLayers(map: Map) {
   map.addSource("cameras", { type: "geojson", data: emptyCollection() })
+  map.addSource("speed-cams", { type: "geojson", data: emptyCollection() })
   map.addSource("works", { type: "geojson", data: emptyCollection() })
   map.addSource("tolls", { type: "geojson", data: emptyCollection() })
   map.addSource("incidents", { type: "geojson", data: emptyCollection() })
@@ -1460,6 +1466,7 @@ function bindOverlayClicks(
     "tolls-portal": tollPopup,
     "tolls-overview": tollPopup,
     incidents: incidentPopup,
+    "speed-cams": speedCamPopup,
     "control-points": controlPointPopup,
     "mtr-stations": (properties) => stationPopup(properties, mtrRef.current, copyRef.current),
     "mtr-station-label": (properties) => stationPopup(properties, mtrRef.current, copyRef.current),
@@ -1621,6 +1628,26 @@ function addWatchLayers(map: Map, before: string | undefined) {
     addCameraLayer(map, "cameras-harbour", ["==", ["get", "harbour"], 1], AVAILABILITY_MIN_ZOOM, before)
     addCameraLayer(map, "cameras-portal", ["all", ["==", ["get", "portal"], 1], ["!=", ["get", "harbour"], 1]], AVAILABILITY_MIN_ZOOM, before)
     addCameraLayer(map, "cameras-city", ["all", ["!=", ["get", "harbour"], 1], ["!=", ["get", "portal"], 1]], AVAILABILITY_MIN_ZOOM, before)
+  }
+  const housing = speedCamMark()
+  if (housing && !map.hasImage("speed-cam-mark")) {
+    map.addImage("speed-cam-mark", housing, { pixelRatio: 2 })
+  }
+  if (map.hasImage("speed-cam-mark")) {
+    addOverlay(map, {
+      id: "speed-cams",
+      type: "symbol",
+      source: "speed-cams",
+      minzoom: AVAILABILITY_MIN_ZOOM,
+      layout: {
+        "icon-image": "speed-cam-mark",
+        "icon-size": ["interpolate", ["linear"], ["zoom"], 11, 0.55, 14, 0.9, 16, 1.05],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-pitch-alignment": "map",
+        "icon-rotation-alignment": "map",
+      },
+    }, before)
   }
   addOverlay(map, {
     id: "mtr-track-casing",
@@ -1951,6 +1978,32 @@ function addCameraLayer(map: Map, id: string, filter: FilterSpecification, minzo
       "icon-ignore-placement": true,
     },
   }, beforeId)
+}
+
+function speedCamMark(): ImageData | null {
+  const size = 64
+  const canvas = document.createElement("canvas")
+  canvas.width = size
+  canvas.height = size
+  const context = canvas.getContext("2d", { willReadFrequently: true })
+  if (!context) return null
+  context.clearRect(0, 0, size, size)
+  context.translate(size / 2, size / 2)
+  roundBox(context, -14, -10, 28, 22, 4)
+  context.fillStyle = "#FFF7ED"
+  context.fill()
+  context.lineWidth = 3
+  context.strokeStyle = "#7C2D12"
+  context.stroke()
+  context.beginPath()
+  context.arc(0, 1, 7, 0, Math.PI * 2)
+  context.fillStyle = "#FB923C"
+  context.fill()
+  context.beginPath()
+  context.arc(-2, -1, 2, 0, Math.PI * 2)
+  context.fillStyle = "#FFF7ED"
+  context.fill()
+  return context.getImageData(0, 0, size, size)
 }
 
 function cameraCone(): ImageData | null {
@@ -2302,6 +2355,8 @@ function layerIds(kind: WatchLayer): string[] {
       return ["corridor-glow", "corridor-casing", "corridor-line", "corridor-point", "traffic-particles"]
     case "cameras":
       return ["cameras-harbour", "cameras-portal", "cameras-city"]
+    case "speedcam":
+      return ["speed-cams"]
     case "works":
       return ["works"]
     case "tolls":

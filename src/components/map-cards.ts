@@ -133,6 +133,15 @@ export function controlPointPopup(properties: GeoJSON.GeoJsonProperties, m: Mess
   return card.root
 }
 
+export function speedCamPopup(properties: GeoJSON.GeoJsonProperties, m: Messages): HTMLElement {
+  const traditional = m.locale === "zh-CN" ? textProp(properties, "nameSc") || textProp(properties, "nameTc") : textProp(properties, "nameTc")
+  const title = displayText(m.locale, traditional, textProp(properties, "name")) || m.speedCam
+  const card = openCard(title, m.speedCam)
+  const remarks = textProp(properties, "remarks")
+  if (remarks) card.body.append(paragraph("city-card-copy", remarks))
+  return card.root
+}
+
 export function incidentPopup(properties: GeoJSON.GeoJsonProperties, m: Messages): HTMLElement {
   const title = displayText(m.locale, textProp(properties, "nameTc"), textProp(properties, "name")) || m.incident
   const card = openCard(title, m.incidentsLayer)

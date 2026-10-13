@@ -14,7 +14,7 @@ export const PLACE_FOCUS_ZOOM = 16.5
 export const KMB_POLL_MS = 60_000
 export const PLACE_POLL_MS = 12 * 60 * 60 * 1000
 
-const AVAILABILITY_LAYERS = new Set<WatchLayer>(["cameras", "charger"])
+const AVAILABILITY_LAYERS = new Set<WatchLayer>(["cameras", "speedcam", "charger"])
 const AFTER_SWEEP = new Set<WatchLayer>([
   "parking",
   "meter",

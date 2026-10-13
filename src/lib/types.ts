@@ -328,7 +328,7 @@ export type FerryResponse = {
   cacheable?: boolean
 }
 
-export type WatchLayer = "speed" | "cameras" | "works" | "tolls" | "incidents" | "control" | "mtr" | "kmb" | "lrt" | "citybus" | "gmb" | "nlb" | "mtrbus" | "ferry" | "parking" | "motorcycle" | "kerb" | "meter" | "charger"
+export type WatchLayer = "speed" | "cameras" | "speedcam" | "works" | "tolls" | "incidents" | "control" | "mtr" | "kmb" | "lrt" | "citybus" | "gmb" | "nlb" | "mtrbus" | "ferry" | "parking" | "motorcycle" | "kerb" | "meter" | "charger"
 
 export type WatchLayers = Record<WatchLayer, boolean>
 
