@@ -9,6 +9,9 @@ export default defineConfig({
     compatibilityFlags: ["nodejs_compat"],
     assets: { notFoundHandling: "none" },
     observability: {
+      enabled: false,
+      headSamplingRate: 1,
+      redactQueryString: false,
       logs: {
         enabled: true,
         headSamplingRate: 1,
@@ -16,7 +19,7 @@ export default defineConfig({
         persist: true,
       },
       traces: {
-        enabled: false,
+        enabled: true,
         headSamplingRate: 1,
         persist: true,
       },
